@@ -1,0 +1,75 @@
+/* ============================================================
+   BARRA DE CONTACTO MÓVIL — CIBERAULA
+   Sticky bottom bar, solo visible en pantallas ≤768px
+   Versión: 1.1 (03/03/2026) — Reducido padding
+   ============================================================ */
+
+/* --- Oculta por defecto (escritorio) --- */
+.cib-mobile-bar {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .cib-mobile-bar {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    background: #1B2A4A;
+    border-top: 2px solid rgba(224, 122, 95, 0.3);
+    padding: 0;
+    margin: 0;
+    box-shadow: 0 -4px 20px rgba(15, 23, 42, 0.35);
+    justify-content: stretch;
+    align-items: stretch;
+    height: 44px;
+  }
+
+  .cib-mobile-bar a {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: #ffffff;
+    font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    padding: 3px 2px;
+    transition: background 0.2s;
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+    gap: 2px;
+  }
+
+  .cib-mobile-bar a:last-child {
+    border-right: none;
+  }
+
+  .cib-mobile-bar a:active {
+    background: rgba(224, 122, 95, 0.15);
+  }
+
+  .cib-mobile-bar a svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+  }
+
+  .cib-mobile-bar .cib-bar-whatsapp {
+    background: #25D366;
+    color: #fff;
+    border-right-color: rgba(255, 255, 255, 0.15);
+  }
+
+  .cib-mobile-bar .cib-bar-whatsapp:active {
+    background: #1EBE57;
+  }
+
+  body {
+    padding-bottom: 48px !important;
+  }
+}

@@ -1,0 +1,242 @@
+/* ============================================================
+   RESPONSIVE CATEGORÍAS — CIBERAULA · Moodle 4.5
+   Solo media queries — NO modifica vista de escritorio
+   Versión: 1.2 (03/03/2026) — Fix: hero, interlineado, modalidades, diplomas
+   ============================================================ */
+
+/* --- Desactivar versión dual (13 categorías antiguas) --- */
+.cat-mobile-summary { display: none !important; }
+
+/* ============================================================
+   TABLET (max-width: 768px)
+   ============================================================ */
+@media (max-width: 768px) {
+  .cat-page {
+    padding: 0 12px;
+  }
+
+  /* --- H1: compacto pero impactante --- */
+  .cat-h1 {
+    font-size: 1.65rem;
+    letter-spacing: -0.5px;
+    margin: 10px 0 12px;
+    line-height: 1.15;
+  }
+
+  /* --- Hero: sin recorte, se ve entera --- */
+  .cat-hero { margin-bottom: 12px; }
+  .cat-hero-img {
+    max-height: none;
+    object-fit: contain;
+    border-radius: 8px;
+    width: 100%;
+    height: auto;
+  }
+
+  /* --- Editorial: 1 columna --- */
+  .cat-editorial {
+    padding: 16px;
+    margin-bottom: 14px;
+    border-radius: 6px;
+  }
+
+  .cat-editorial h2 {
+    font-size: 1.15rem;
+    margin: 0 0 14px 0;
+    padding-bottom: 10px;
+    letter-spacing: -0.3px;
+  }
+
+  .cat-editorial h3 {
+    font-size: 1.2rem;
+    margin: 0 0 14px 0;
+    padding-bottom: 10px;
+    letter-spacing: -0.3px;
+  }
+
+  .cat-editorial-body {
+    column-count: 1;
+    column-gap: 0;
+    column-rule: none;
+  }
+
+  .cat-editorial-body p {
+    font-size: 14px;
+    line-height: 1.65;
+    text-align: left;
+    margin: 0 0 12px 0;
+  }
+
+  /* --- Dropcap: más pequeño --- */
+  .cat-dropcap::first-letter,
+  .cat-dropcap-sage::first-letter {
+    font-size: 3em;
+    padding: 4px 8px 3px 8px;
+    margin: 2px 8px 0 0;
+  }
+
+  /* --- Pullquote: solo borde izquierdo --- */
+  .cat-pullquote {
+    border-right: none;
+    text-align: left;
+    border-radius: 0 6px 6px 0;
+    padding: 12px 14px 12px 16px;
+    font-size: 15px;
+    margin: 14px 0;
+  }
+
+  .cat-pullquote::after { display: none; }
+  .cat-pullquote::before {
+    position: static;
+    display: inline;
+    font-size: 22px;
+    margin-right: 4px;
+  }
+  .cat-pullquote-text { padding: 0; display: inline; }
+
+  /* --- Transición --- */
+  .cat-section-intro {
+    font-size: 1.4rem;
+    margin: 20px 0 14px 0;
+    letter-spacing: -0.5px;
+  }
+
+  /* --- Grids: apilar verticalmente --- */
+  .cat-row-top,
+  .cat-row-bottom {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  /* --- Bloques de info --- */
+  .cat-block-header {
+    font-size: 15px;
+    height: 34px;
+    padding: 0 10px;
+    border-radius: 4px;
+  }
+
+  .cat-block-header img {
+    width: 28px;
+    height: 28px;
+    margin-top: -8px;
+  }
+
+  .cat-block p {
+    font-size: 13px;
+    line-height: 1.6;
+    text-align: left;
+  }
+
+  .cat-block ul { margin-left: 16px; }
+
+  .cat-block ul li {
+    font-size: 13px;
+    line-height: 1.55;
+    margin-bottom: 5px;
+  }
+
+  /* --- Bonificación --- */
+  .cat-bonif-img { max-width: 160px; margin: 10px auto 5px; }
+
+  /* --- Modalidades: apilar, imagen contenida --- */
+  .cat-modalidades-content {
+    flex-direction: column;
+  }
+
+  .cat-modalidades-text { flex: none; }
+  .cat-modalidades-img {
+    flex: none;
+    max-width: 60%;
+    margin: 0 auto 12px;
+    order: -1;
+  }
+
+  .cat-modalidades-img img {
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(27, 42, 74, 0.10);
+  }
+
+  /* --- Diplomas: grandes y bien visibles --- */
+  .cat-diplomas-section img.cat-diploma-img {
+    max-width: 85%;
+    margin: 0 auto 14px;
+    display: block;
+    border-radius: 4px;
+    box-shadow: 0 1px 6px rgba(27, 42, 74, 0.10);
+  }
+
+  .cat-diploma-label {
+    font-size: 14px;
+    text-align: center;
+    margin: 10px 0 6px;
+  }
+
+  /* --- Cursos disponibles: interlineado compacto --- */
+  .cat-courses h2 {
+    font-size: 1.2rem;
+    letter-spacing: -0.3px;
+  }
+
+  .cat-courses .cat-courses-intro { font-size: 13px; }
+
+  .cat-courses ol { padding-left: 20px; }
+
+  .cat-courses ol li {
+    font-size: 14px;
+    margin-bottom: 4px;
+    line-height: 1.3;
+  }
+
+  .cat-courses ol li a {
+    font-size: 14px;
+    display: inline-block;
+    padding: 3px 0;
+  }
+
+  /* --- Forzar cat-desktop visible --- */
+  .cat-mobile-summary { display: none !important; }
+  .cat-desktop { display: block !important; }
+}
+
+/* ============================================================
+   MÓVIL PEQUEÑO (max-width: 480px)
+   ============================================================ */
+@media (max-width: 480px) {
+  .cat-page { padding: 0 8px; }
+
+  .cat-h1 {
+    font-size: 1.4rem;
+    margin: 8px 0 10px;
+  }
+
+  .cat-editorial { padding: 14px 12px; }
+
+  .cat-editorial h2 { font-size: 1.05rem; }
+  .cat-editorial h3 { font-size: 1.1rem; }
+
+  .cat-editorial-body p { font-size: 13.5px; line-height: 1.6; }
+
+  .cat-dropcap::first-letter,
+  .cat-dropcap-sage::first-letter {
+    font-size: 2.6em;
+    padding: 3px 7px 2px 7px;
+  }
+
+  .cat-pullquote { font-size: 14px; padding: 10px 12px 10px 14px; }
+
+  .cat-section-intro { font-size: 1.2rem; }
+
+  .cat-block-header { font-size: 14px; }
+
+  .cat-bonif-img { max-width: 130px; }
+
+  /* Modalidades: imagen un poco más grande en móvil pequeño */
+  .cat-modalidades-img { max-width: 70%; }
+
+  /* Diplomas: mantener grandes */
+  .cat-diplomas-section img.cat-diploma-img { max-width: 90%; }
+
+  .cat-courses ol li { font-size: 13.5px; margin-bottom: 3px; }
+  .cat-courses ol li a { font-size: 13.5px; }
+}
