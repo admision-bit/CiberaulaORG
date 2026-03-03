@@ -57,6 +57,9 @@ ciberaula-api-proxy.php
 claude_file_manager.php
 mcp_server.php
 devfm.php
+git_commit.php
+_git_set_remote.php
+_git_*.php
 
 # ----- SISTEMA OPERATIVO -----
 .DS_Store
@@ -73,3 +76,6 @@ Thumbs.db
 
 # ----- NODE (Grunt/npm de Moodle) -----
 node_modules/
+
+# ----- ARCHIVOS *.bak de backups automaticos MCP -----
+*.bak
