@@ -1,0 +1,75 @@
+# =======================================================
+# .gitignore — Proyecto Migracion Ciberaula (Moodle 4.5)
+# Creado: 03/03/2026
+# =======================================================
+
+# ----- ARCHIVOS SENSIBLES (contrasenas, tokens) -----
+config.php
+.mcp_oauth_tokens.json
+
+# ----- LOGS -----
+mcp_access.log
+*.log
+
+# ----- BACKUPS GENERADOS POR HERRAMIENTAS -----
+.backups_mcp/
+.backups_claude/
+.backups_dev/
+.claude_fm_logs/
+backups/
+
+# ----- DATOS GENERADOS (Moodle) -----
+moodledata/
+localcache/
+trashdir/
+
+# ----- SCRIPTS TEMPORALES DE DIAGNOSTICO Y MIGRACION -----
+_*.php
+_*.txt
+_*.json
+_*.html
+
+# ----- SCRIPTS DE FIX/SETUP/MIGRACION -----
+fix_*.php
+check_*.php
+setup_*.php
+install_pages*.php
+update_*.php
+purge_*.php
+migrar_*.php
+migrate_*.php
+inventario_*.php
+verificar_*.php
+seo_meta.php
+proximos_eventos.php
+
+# ----- PAGINAS ESTATICAS LOCALES (no parte del tema) -----
+portada_v3.css
+portada_v3.html
+pagina_*.html
+head_css.html
+informe_*.html
+informe_*.json
+frontpage_config_backup_*.txt
+
+# ----- HERRAMIENTAS DE ACCESO REMOTO (Claude, API) -----
+ciberaula-api-proxy.php
+claude_file_manager.php
+mcp_server.php
+devfm.php
+
+# ----- SISTEMA OPERATIVO -----
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# ----- IDE / EDITORES -----
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# ----- NODE (Grunt/npm de Moodle) -----
+node_modules/
