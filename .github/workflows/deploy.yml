@@ -1,0 +1,22 @@
+name: Despliegue Automático Ciberaula
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar código de GitHub
+        uses: actions/checkout@v3
+
+      - name: Sincronizar archivos con el servidor Plesk
+        uses: easingthemes/ssh-deploy@main
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          REMOTE_HOST: ${{ secrets.SERVER_HOST }}
+          REMOTE_USER: ${{ secrets.SERVER_USER }}
+          REMOTE_PORT: ${{ secrets.SERVER_PORT }}
+          TARGET: ${{ secrets.REMOTE_TARGET }}
+          ARGS: "-rlgoDzvc -i" # Mantiene permisos y sincroniza solo cambios
