@@ -1,0 +1,38 @@
+User-agent: *
+
+# Catalogo movil /m/ — permitir todo excepto endpoints internos
+Allow: /m/
+Disallow: /m/buscar.php
+Disallow: /m/categorias_json.php
+Disallow: /m/config.php
+Disallow: /m/seo.php
+
+# Calendario de Moodle — bloquear navegacion y URLs basura
+# Las fichas de evento individuales se dejan libres para uso SEO futuro
+Disallow: /calendar/view.php
+Disallow: /calendar/set.php
+Disallow: /calendar/export.php
+Disallow: /calendar/export_execute.php
+Disallow: /calendar/managesubscriptions.php
+
+# URLs con sesskey — siempre basura, nunca indexar
+Disallow: /*?sesskey=
+Disallow: /*&sesskey=
+
+# Matriculacion — no tiene valor SEO
+Disallow: /enrol/
+
+# Moodle interno — sin valor SEO
+Disallow: /admin/
+Disallow: /login/
+Disallow: /user/
+Disallow: /message/
+Disallow: /grade/
+Disallow: /lib/
+Disallow: /blocks/
+Disallow: /theme/
+Disallow: /mod/
+Disallow: /question/
+Disallow: /report/
+
+Sitemap: https://www.ciberaula.org/m/sitemap.xml

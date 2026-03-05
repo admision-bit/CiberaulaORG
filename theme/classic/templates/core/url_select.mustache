@@ -1,0 +1,53 @@
+{{!
+    @template core/url_select
+    Override en theme/classic: usa GET directo en lugar de POST a jumpto.php
+    Evita el error de sesskey en Edge y otros navegadores estrictos.
+}}
+<div class="{{classes}}">
+    <form method="get" action="" class="d-flex flex-wrap align-items-center" id="{{formid}}">
+        {{#label}}
+            <label for="{{id}}"{{#labelattributes}} {{name}}="{{value}}"{{/labelattributes}}>
+                {{label}}
+            </label>
+        {{/label}}
+        {{#helpicon}}
+            {{>core/help_icon}}
+        {{/helpicon}}
+        <select {{#attributes}}{{name}}="{{value}}" {{/attributes}} id="{{id}}" class="custom-select {{classes}}" name="jump"
+                {{#title}}title="{{.}}"{{/title}} {{#disabled}}disabled{{/disabled}}>
+            {{#options}}
+                {{#isgroup}}
+                    <optgroup label="{{name}}">
+                        {{#options}}
+                            <option value="{{value}}" {{#selected}}selected{{/selected}} {{#disabled}}disabled{{/disabled}}>{{{name}}}</option>
+                        {{/options}}
+                    </optgroup>
+                {{/isgroup}}
+                {{^isgroup}}
+                    <option value="{{value}}" {{#selected}}selected{{/selected}} {{#disabled}}disabled{{/disabled}}>{{{name}}}</option>
+                {{/isgroup}}
+            {{/options}}
+        </select>
+        {{#showbutton}}
+            <input type="submit" class="btn btn-secondary ms-1" value="{{showbutton}}">
+        {{/showbutton}}
+        {{^showbutton}}
+            <noscript>
+                <input type="submit" class="btn btn-secondary ms-1" value="{{#str}}go, core{{/str}}">
+            </noscript>
+        {{/showbutton}}
+    </form>
+</div>
+{{^showbutton}}
+    {{#js}}
+        require(['jquery', 'core/custom_interaction_events'], function($, CustomEvents) {
+            CustomEvents.define('#{{id}}', [CustomEvents.events.accessibleChange]);
+            $('#{{id}}').on(CustomEvents.events.accessibleChange, function() {
+                var url = $(this).val();
+                if (url) {
+                    window.location.href = url;
+                }
+            });
+        });
+    {{/js}}
+{{/showbutton}}

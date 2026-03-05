@@ -1,0 +1,290 @@
+<?php
+
+// REDIRECT CANONICO: /m/categoria.php?id=X -> /slug-amigable
+// Si el usuario llega por URL tecnica, redirigimos a la URL amigable
+// (que el .htaccess interceptara y mostrara la vista movil correctamente)
+$_ID_SLUG_MAP = array (
+  3 => 'cursos-bonificados-de-ofimatica',
+  4 => 'cursos-bonificados-de-administracion-de-empresas',
+  5 => 'cursos-bonificados-de-autocad',
+  6 => 'cursos-bonificados-de-idiomas',
+  8 => 'cursos-online-de-excel',
+  9 => 'cursos-bonificados-de-ingles',
+  11 => 'cursos-bonificados-de-alimentacion-y-hosteleria',
+  12 => 'cursos-bonificados-de-diseno-grafico-2d-y-3d',
+  13 => 'cursos-bonificados-de-economia-y-finanzas',
+  14 => 'cursos-bonificados-de-educacion',
+  15 => 'cursos-bonificados-de-euskera',
+  16 => 'cursos-bonificados-de-fitosanitarios-y-biocidas',
+  18 => 'cursos-bonificados-de-formacion-vial',
+  19 => 'cursos-bonificados-de-gestion-y-administracion',
+  20 => 'cursos-bonificados-de-habilidades-empresariales',
+  23 => 'cursos-bonificados-de-marketing-y-ventas',
+  26 => 'cursos-bonificados-de-prevencion-de-riesgos-laborales',
+  27 => 'cursos-online-bonificados-de-proteccion-de-datos',
+  28 => 'cursos-bonificados-de-refrigerantes-y-gases-fluorados',
+  29 => 'cursos-bonificados-de-retoque-fotografico-y-diseno-editorial',
+  30 => 'cursos-bonificados-de-sanidad',
+  31 => 'cursos-bonificados-de-sanitarios',
+  32 => 'cursos-bonificados-de-seguridad-alimentaria',
+  33 => 'cursos-bonificados-de-gestion-normas-iso',
+  34 => 'cursos-bonificados-de-tpc',
+  35 => 'cursos-bonificados-de-transporte',
+  37 => 'cursos-bonificados',
+  38 => 'cursos-bonificados-en-barcelona',
+  39 => 'cursos-bonificados-de-paginas-web-y-programacion',
+  47 => 'cursos-online-de-ingles-basico',
+  49 => 'cursos-online-de-ingles-intermedio',
+  50 => 'cursos-online-de-ingles-avanzado',
+  51 => 'cursos-online-de-ingles-a1',
+  52 => 'cursos-online-de-ingles-a2',
+  53 => 'cursos-online-de-ingles-b1',
+  56 => 'cursos-online-de-office',
+  57 => 'cursos-online-de-office-basico',
+  58 => 'cursos-online-de-office-intermedio',
+  59 => 'cursos-online-de-office-avanzado',
+  62 => 'cursos-online-de-prevencion-de-riesgos-laborales',
+  63 => 'cursos-online-de-ingles-b2',
+  66 => 'cursos-bonificados-de-contabilidad',
+  67 => 'cursos-bonificados-de-redes-sociales',
+  68 => 'cursos-bonificados-de-teletrabajo',
+  69 => 'cursos-bonificados-de-enfermeria',
+  70 => 'cursos-bonificados-de-competencias-digitales',
+  71 => 'cursos-bonificados-de-chino',
+  72 => 'cursos-bonificados-de-gestion-ambiental',
+  73 => 'cursos-bonificados-de-energias-renovables',
+  74 => 'cursos-bonificados-de-electricidad-y-electronica',
+  76 => 'cursos-bonificados-seguridad-social',
+  77 => 'mejores-cursos-de-ingles-online',
+  78 => 'fundae-cursos',
+  85 => 'cursos-bonificados-para-trabajadores-2020',
+  89 => 'cursos-bonificados-de-medicina',
+  90 => 'cursos-bonificados-de-psicologia',
+  91 => 'cursos-bonificados-de-informatica',
+  92 => 'cursos-bonificados-de-diseno-3d',
+  94 => 'cursos-bonificados-de-linux',
+  96 => 'cursos-online-de-java',
+  97 => 'cursos-bonificados-de-big-data',
+  98 => 'cursos-bonificados-de-periodismo',
+  100 => 'cursos-online-bonificados-de-seguridad-informatica',
+  101 => 'cursos-online-de-programacion-movil',
+  102 => 'cursos-online-bonificados-de-turismo',
+  103 => 'cursos-online-bonificados-de-robotica',
+  105 => 'cursos-online-bonificados-de-finanzas',
+  106 => 'cursos-online-de-impresion-3d',
+  107 => 'cursos-online-bonificados-de-inteligencia-artificial',
+  108 => 'cursos-online-de-wordpress',
+  109 => 'cursos-online-de-euskera',
+  110 => 'cursos-online-bonificados-de-arabe',
+  111 => 'cursos-bonificados-de-auxiliar-de-enfermeria',
+  112 => 'cursos-bonificados-de-igualdad-de-genero',
+  113 => 'cursos-bonificados-de-plan-de-igualdad-de-genero',
+  114 => 'cursos-online-bonificados-de-ruso',
+  117 => 'cursos-bonificados-de-atencion-al-cliente',
+  118 => 'cursos-online-bonificados-de-redes-sociales',
+  119 => 'cursos-online-bonificados-de-cocina',
+  120 => 'cursos-bonificados-de-diseno-industrial-cad',
+  122 => 'cursos-online-bonificados-de-Outlook',
+  124 => 'cursos-online-bonificados-de-aleman',
+  126 => 'cursos-online-bonificados-de-criptomonedas',
+  127 => 'cursos-online-bonificados-de-blockchain',
+  128 => 'cursos-bonificados-de-criptomonedas',
+  129 => 'cursos-bonificados-online-de-digitalizacion-en-la-empresa',
+  130 => 'cursos-online-bonificados-de-excel',
+  131 => 'cursos-online-bonificados-de-proteccion-de-datos',
+  132 => 'cursos-online-bonificados-de-python',
+  133 => 'cursos-online-bonificados-de-frances',
+  134 => 'opiniones-valoraciones-testimonios',
+  135 => 'cursos-bonificados-online-de-salud-mental',
+  136 => 'aula-empresas',
+  137 => 'cursos-bonificados-de-escaparatismo',
+  138 => 'cursos-bonificados-de-chatgpt',
+  139 => 'cursos-bonificados-de-recursos-humanos',
+  140 => 'cursos-bonificados-de-servicios-sociales',
+  141 => 'cursos-bonificados-de-logistica',
+  142 => 'cursos-bonificados-de-comercio',
+  143 => 'cursos-bonificados-de-farmacia',
+  144 => 'cursos-bonificados-de-terapia-ocupacional',
+  145 => 'cursos-bonificados-de-trabajo-social',
+  146 => 'cursos-bonificados-de-drones',
+  147 => 'cursos-bonificados-de-mecanica',
+  148 => 'cursos-bonificados-de-belleza',
+  149 => 'cursos-bonificados-de-psicopedagogia',
+  150 => 'cursos-bonificados-de-integracion-social',
+  151 => 'cursos-bonificados-de-drogodependencia',
+  152 => 'cursos-bonificados-de-logopedia',
+  153 => 'cursos-bonificados-de-artes-graficas',
+  154 => 'cursos-bonificados-de-agricultura',
+  155 => 'cursos-bonificados-de-sonido',
+  156 => 'cursos-bonificados-de-telecomunicaciones',
+  157 => 'cursos-bonificados-de-gestion-comercial-y-ventas',
+  158 => 'cursos-bonificados-de-contenidos-y-proyectos-audiovisuales',
+  159 => 'cursos-bonificados-de-fiscalidad',
+  160 => 'cursos-bonificados-de-ingenieria',
+  161 => 'cursos-bonificados-de-telemarketing',
+  162 => 'cursos-bonificados-de-bolsa',
+  163 => 'cursos-bonificados-de-medicina-estetica',
+  164 => 'cursos-bonificados-de-derecho',
+  165 => 'cursos-bonificados-de-comercio-electronico',
+  166 => 'cursos-bonificados-de-inteligencia-artificial-creacion-chatbots',
+  167 => 'cursos-bonificados-de-inteligencia-artificial-generacion-videos',
+  168 => 'cursos-bonificados-de-programacion-con-python',
+);
+if (isset($_GET["id"]) && isset($_ID_SLUG_MAP[(int)$_GET["id"]])) {
+    $slug = $_ID_SLUG_MAP[(int)$_GET["id"]];
+    // Solo redirigir si la peticion viene directamente (no es un loop interno)
+    if (!isset($_SERVER["HTTP_X_REWRITE_INTERNAL"])) {
+        header("HTTP/1.1 301 Moved Permanently");
+        header("Location: https://www.ciberaula.org/" . $slug);
+        exit;
+    }
+}
+// FIN REDIRECT CANONICO
+
+/**
+ * Página de Categoría v4 - Catálogo Móvil Ciberaula
+ * FAQ contextualizadas + Schema JSON-LD (FAQPage, BreadcrumbList)
+ */
+require __DIR__ . '/config.php';
+require __DIR__ . '/seo.php';
+
+$catId = isset($_GET['id']) ? intval($_GET['id']) : 0;
+if (!$catId) { header('Location: ' . BASE_URL); exit; }
+
+$db = db();
+
+$stmt = $db->prepare("SELECT id, name, description FROM mdl_course_categories WHERE id = ? AND visible = 1");
+$stmt->bind_param('i', $catId);
+$stmt->execute();
+$cat = $stmt->get_result()->fetch_assoc();
+$stmt->close();
+if (!$cat) { header('Location: ' . BASE_URL); exit; }
+
+$nombre = clean_cat_name($cat['name']);
+$heroUrl = extract_hero_url($cat['description']);
+$editorialTitle = extract_editorial_title($cat['description']);
+$editorialText = extract_editorial($cat['description']);
+
+$stmt = $db->prepare("SELECT id, fullname, summary FROM mdl_course WHERE category = ? AND visible = 1 ORDER BY fullname");
+$stmt->bind_param('i', $catId);
+$stmt->execute();
+$result = $stmt->get_result();
+$cursos = [];
+while ($row = $result->fetch_assoc()) {
+    $data = extract_course_data($row['summary']);
+    $cursos[] = [
+        'id' => $row['id'],
+        'nombre' => plain_text($row['fullname']),
+        'horas' => $data['horas'],
+        'imagen' => $data['imagen'],
+    ];
+}
+$stmt->close();
+
+$nombreCorto = short_cat_name($nombre);
+
+// Paleta de colores para cursos sin imagen
+$palette = ['#1B2A4A','#2d4a7a','#E07A5F','#6B8F71','#8B5E3C','#5C6BC0','#00897B','#C62828','#F4845F','#7E57C2','#0277BD','#AD1457'];
+
+$pageTitle = $nombre;
+$pageDesc = 'Cursos bonificados de ' . $nombreCorto . ' para empresas. 100% bonificable por FUNDAE. ' . count($cursos) . ' cursos disponibles.';
+$pageImage = $heroUrl ?: '';
+
+// FAQ contextualizadas
+$faqs = get_faq_categoria($nombreCorto);
+
+// Schema JSON-LD
+$pageSchemas = [
+    schema_faqpage($faqs),
+    schema_breadcrumbs([
+        ['name' => 'Inicio', 'url' => 'https://dev.ciberaula.org' . BASE_URL],
+        ['name' => $nombre, 'url' => 'https://dev.ciberaula.org' . BASE_URL . 'categoria.php?id=' . $catId],
+    ]),
+];
+
+require __DIR__ . '/header.php';
+?>
+
+<nav class="breadcrumb">
+  <a href="<?= BASE_URL ?>">Inicio</a> &rsaquo; <?= htmlspecialchars($nombre) ?>
+</nav>
+
+<?php if ($heroUrl): ?>
+<img class="cat-hero-img" src="<?= htmlspecialchars($heroUrl) ?>" alt="<?= htmlspecialchars($nombre) ?>" width="800" height="300">
+<?php endif; ?>
+
+<h1 class="cat-title"><?= htmlspecialchars($nombre) ?></h1>
+
+<?php if ($editorialText): ?>
+<article class="cat-editorial">
+  <?php if ($editorialTitle): ?>
+  <h2 class="cat-editorial-title"><?= htmlspecialchars($editorialTitle) ?></h2>
+  <?php endif; ?>
+  <p><?= $editorialText ?></p>
+</article>
+<?php endif; ?>
+
+<div class="info-block">
+  <div class="info-block-header">
+    <img src="<?= IMG_BASE ?>comunes/Bonificacion.png" alt="" width="24" height="24"> Bonificación por FUNDAE
+  </div>
+  <div class="info-block-body">
+    <p>Los cursos de <strong><?= htmlspecialchars($nombreCorto) ?></strong> pueden ser bonificados al 100% para la empresa receptora, incluso aunque tenga un porcentaje de copago en razón de su número de empleados en plantilla.</p>
+    <div class="bonif-badge">BONIFICACIÓN 100%</div>
+  </div>
+</div>
+
+<div class="info-block">
+  <div class="info-block-header">
+    <img src="<?= IMG_BASE ?>comunes/Tiempo.png" alt="" width="24" height="24"> Duración y Plazo
+  </div>
+  <div class="info-block-body">
+    <p>La duración de los cursos de <strong><?= htmlspecialchars($nombreCorto) ?> online</strong> puede estar entre 20 y 100 horas lectivas. El plazo para realizarlo es flexible.</p>
+    <p><strong>Fecha de inicio:</strong> Se puede determinar libremente. En cursos bonificados se debe comunicar a FUNDAE con al menos 7 días de antelación.</p>
+  </div>
+</div>
+
+<div class="info-block">
+  <div class="info-block-header">
+    <img src="<?= IMG_BASE ?>comunes/modalidades.png" alt="" width="24" height="24"> Modalidades
+  </div>
+  <div class="info-block-body">
+    <p>El curso se imparte en tres modalidades:</p>
+    <ul>
+      <li>Teleformación con asistencia de profesor (acceso 24 hs.)</li>
+      <li>Clases en vivo - Aula Virtual</li>
+      <li>Modalidad MIXTA: combinación de ambas</li>
+    </ul>
+    <p>En cualquiera de los casos es bonificable al 100% a través de FUNDAE.</p>
+  </div>
+</div>
+
+<section class="courses-section">
+  <h2 class="courses-title"><?= count($cursos) ?> cursos disponibles</h2>
+  <?php foreach ($cursos as $i => $curso): ?>
+  <a href="<?= BASE_URL ?>curso.php?id=<?= $curso['id'] ?>" class="course-item">
+    <?php if ($curso['imagen']): ?>
+    <img src="<?= htmlspecialchars($curso['imagen']) ?>" alt="" loading="lazy" width="60" height="60">
+    <?php else:
+      $color = $palette[$curso['id'] % count($palette)];
+      $inicial = mb_strtoupper(mb_substr($curso['nombre'], 0, 1));
+    ?>
+    <div class="course-item-noimg" style="background:<?= $color ?>"><span><?= $inicial ?></span></div>
+    <?php endif; ?>
+    <div class="course-info">
+      <div class="course-name"><?= htmlspecialchars($curso['nombre']) ?></div>
+      <?php if ($curso['horas']): ?>
+      <div class="course-hours"><?= $curso['horas'] ?> horas - 100% bonificable</div>
+      <?php endif; ?>
+    </div>
+    <span class="course-arrow">&rsaquo;</span>
+  </a>
+  <?php endforeach; ?>
+</section>
+
+<?php
+// FAQ contextualizadas de la categoría
+render_faq($faqs, 'Preguntas frecuentes sobre cursos de ' . $nombreCorto);
+
+require __DIR__ . '/footer.php';
+?>

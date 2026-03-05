@@ -1,0 +1,155 @@
+<?php
+/**
+ * Catalogo Movil Ciberaula - Configuracion y helpers
+ * Instalacion paralela, independiente de Moodle.
+ * Solo lee datos de la BD. No escribe nada.
+ * v5 - 03/03/2026 - Regex objetivos ampliado, object-position
+ */
+
+// --- Conexion BD (solo lectura) ---
+function db() {
+    static $conn = null;
+    if ($conn === null) {
+        $conn = new mysqli('localhost', 'ciberaulaorg', 'Ciberaula2026Moodle', 'moodle.ciberaula_org');
+        if ($conn->connect_error) die('Error de conexion');
+        $conn->set_charset('utf8mb4');
+    }
+    return $conn;
+}
+
+// --- Constantes ---
+define('BASE_URL', '/m/');
+define('SITE_NAME', 'Ciberaula');
+define('SITE_PHONE', '915 303 387');
+define('SITE_PHONE_INTL', '+34915303387');
+define('SITE_EMAIL', 'admision@ciberaula.com');
+define('SITE_WA', '34620505230');
+define('IMG_BASE', 'https://dev.ciberaula.org/images/');
+
+// --- Limpiar nombre de categoria ---
+function clean_cat_name($name) {
+    $n = html_entity_decode($name, ENT_QUOTES, 'UTF-8');
+    $n = preg_replace('/[\x{1F947}\x{1F3C6}]/u', '', $n);
+    return trim($n);
+}
+
+// --- Nombre corto (quitar prefijos comunes) ---
+function short_cat_name($name) {
+    $clean = clean_cat_name($name);
+    $clean = preg_replace('/^Cursos\s+(bonificados\s+de\s+|online\s+de\s+|bonificados\s+)/i', '', $clean);
+    return trim($clean);
+}
+
+// --- Categorias para la navegacion (cacheada en memoria) ---
+function get_nav_categories() {
+    static $cats = null;
+    if ($cats !== null) return $cats;
+    $db = db();
+    $sql = "SELECT c.id, c.name, COUNT(co.id) as num_cursos
+            FROM mdl_course_categories c
+            INNER JOIN mdl_course co ON co.category = c.id AND co.visible = 1
+            WHERE c.visible = 1 AND c.description LIKE '%cat-page%'
+            GROUP BY c.id
+            ORDER BY c.name";
+    $result = $db->query($sql);
+    $cats = [];
+    while ($row = $result->fetch_assoc()) {
+        $cats[] = $row;
+    }
+    return $cats;
+}
+
+// --- Extraer texto editorial limpio del description ---
+function extract_editorial($desc) {
+    if (preg_match('/<div class="cat-editorial-body">(.*?)<\/div>/is', $desc, $m)) {
+        return clean_html($m[1]);
+    }
+    if (preg_match('/<div class="cat-editorial">(.*?)<\/div>\s*(?:<!--|<div)/is', $desc, $m)) {
+        return clean_html($m[1]);
+    }
+    return '';
+}
+
+// --- Extraer titulo editorial (h2/h3 dentro de editorial) ---
+function extract_editorial_title($desc) {
+    if (preg_match('/<div class="cat-editorial">\s*<h[23][^>]*>(.*?)<\/h[23]>/is', $desc, $m)) {
+        return trim(strip_tags(html_entity_decode($m[1], ENT_QUOTES, 'UTF-8')));
+    }
+    return '';
+}
+
+// --- Extraer URL de imagen hero de la categoria ---
+function extract_hero_url($desc) {
+    if (preg_match('/cat-hero-img[^>]*src="([^"]+)"/i', $desc, $m)) {
+        return $m[1];
+    }
+    return '';
+}
+
+// --- Extraer datos limpios del summary de un curso ---
+function extract_course_data($summary) {
+    $data = ['objetivo' => '', 'horas' => '', 'imagen' => '', 'resumen' => ''];
+
+    // Horas - multiple patrones
+    if (preg_match('/Horas Lectivas:\s*(\d+)\s*h/i', $summary, $m)) {
+        $data['horas'] = $m[1];
+    }
+    // Primera imagen (excluir iconos pequenos)
+    if (preg_match('/<img[^>]*src="([^"]+)"/i', $summary, $m)) {
+        $url = html_entity_decode($m[1], ENT_QUOTES, 'UTF-8');
+        if (!preg_match('/icon|favicon|pixel|spacer/i', $url)) {
+            $data['imagen'] = $url;
+        }
+    }
+    // Objetivos - captura amplia:
+    // 1. <h2>Objetivos...</h2> seguido de contenido
+    // 2. <h2>Al finalizar el curso...</h2> seguido de contenido
+    // 3. <div class="objetivos"> contenido </div>
+    if (preg_match('/<h2[^>]*>\s*Objetivos[^<]*<\/h2>\s*(.*?)(<\/div>|<div|<h2|$)/is', $summary, $m)) {
+        $data['objetivo'] = clean_html($m[1]);
+    } elseif (preg_match('/<h2[^>]*>\s*Al finalizar[^<]*<\/h2>\s*(.*?)(<\/div>|<div|<h2|$)/is', $summary, $m)) {
+        $data['objetivo'] = clean_html($m[1]);
+    } elseif (preg_match('/<div[^>]*class="objetivos"[^>]*>(.*?)<\/div>/is', $summary, $m)) {
+        // Quitar el H2 interno si existe
+        $inner = preg_replace('/<h2[^>]*>.*?<\/h2>/is', '', $m[1]);
+        $data['objetivo'] = clean_html($inner);
+    }
+    // Resumen breve
+    $data['resumen'] = extract_course_summary_text($summary);
+
+    return $data;
+}
+
+// --- Extraer un resumen breve del summary para la ficha ---
+function extract_course_summary_text($summary) {
+    $text = strip_tags($summary);
+    $text = html_entity_decode($text, ENT_QUOTES, 'UTF-8');
+    $text = preg_replace('/\s+/', ' ', $text);
+    $text = preg_replace('/Horas Lectivas:\s*\d+\s*h[^|]*(\|[^|]*)*/', '', $text);
+    $text = preg_replace('/Objetivos:?\s*/i', '', $text);
+    $text = trim($text);
+    if (mb_strlen($text) > 250) {
+        $text = mb_substr($text, 0, 247) . '...';
+    }
+    return $text;
+}
+
+// --- Limpiar HTML: quitar tags excepto basicos, convertir markdown bold ---
+function clean_html($html) {
+    $t = html_entity_decode($html, ENT_QUOTES, 'UTF-8');
+    // Convertir markdown **bold** a <strong> ANTES de strip_tags
+    $t = preg_replace('/\*\*([^*]+)\*\*/', '<strong>$1</strong>', $t);
+    $t = strip_tags($t, '<strong><em><br><p><ul><li>');
+    $t = preg_replace('/<p[^>]*>\s*<\/p>/i', '', $t);
+    $t = preg_replace('/\s+/', ' ', $t);
+    return trim($t);
+}
+
+// --- Texto plano limpio (sin ningun tag) ---
+function plain_text($html) {
+    $t = html_entity_decode($html, ENT_QUOTES, 'UTF-8');
+    $t = strip_tags($t);
+    $t = preg_replace('/\s+/', ' ', $t);
+    return trim($t);
+}
+?>

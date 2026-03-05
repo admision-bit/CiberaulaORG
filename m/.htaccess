@@ -1,0 +1,4 @@
+RewriteEngine On
+
+# Sitemap XML dinámico
+RewriteRule ^sitemap\.xml$ sitemap.php [L]

@@ -1,4 +1,16 @@
 <?php
+
+// Redireccion movil: si UA es movil y peticion es portada raiz, ir a /m/
+if (!headers_sent()) {
+    $ua = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
+    $is_mobile = preg_match('/Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i', $ua);
+    $uri = isset($_SERVER['REQUEST_URI']) ? strtok($_SERVER['REQUEST_URI'], '?') : '';
+    $is_root = ($uri === '/' || $uri === '/index.php');
+    if ($is_mobile && $is_root) {
+        header('Location: /m/', true, 302);
+        exit;
+    }
+}
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify

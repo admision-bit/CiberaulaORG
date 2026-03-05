@@ -38,4 +38,29 @@ defined('MOODLE_INTERNAL') || die;
  */
 class core_renderer extends \core_renderer {
 
+    /**
+     * CIBERAULA: título SEO personalizado para páginas de categoría.
+     * Formato: "Nombre de la categoría - Ciberaula"
+     * En el resto de páginas, comportamiento estándar de Moodle.
+     *
+     * @return string el título para el tag <title>
+     */
+    public function page_title(): string {
+        // Solo intervenimos en páginas de categoría
+        if ($this->page->pagetype === 'course-index-category') {
+            $heading = $this->page->heading;
+            if (!empty($heading)) {
+                // Limpiamos emojis, HTML y espacios extra
+                $clean = html_entity_decode(strip_tags($heading), ENT_QUOTES, 'UTF-8');
+                $clean = preg_replace('/[\x{1F000}-\x{1FFFF}]|[\x{2600}-\x{27BF}]/u', '', $clean);
+                $clean = trim($clean);
+                if (!empty($clean)) {
+                    return $clean . ' - Ciberaula';
+                }
+            }
+        }
+        // Comportamiento estándar para el resto de páginas
+        return parent::page_title();
+    }
+
 }

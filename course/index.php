@@ -64,6 +64,20 @@ $PAGE->set_primary_active_tab('home');
 $PAGE->add_body_class('limitedwidth');
 $courserenderer = $PAGE->get_renderer('core', 'course');
 
+// --- CIBERAULA: título SEO personalizado por categoría ---
+// Limpiamos el nombre de la categoría: quitamos emojis y HTML
+$clean_heading = html_entity_decode(strip_tags($heading), ENT_QUOTES, 'UTF-8');
+$clean_heading = preg_replace('/[\x{1F000}-\x{1FFFF}]|[\x{2600}-\x{27BF}]/u', '', $clean_heading);
+$clean_heading = trim($clean_heading);
+if ($clean_heading && $clean_heading !== $site->fullname) {
+    // Pasamos false para que Moodle NO añada " | Ciberaula" automáticamente
+    // y podemos usar " - " como separador
+    $PAGE->set_title($clean_heading . ' - Ciberaula', false);
+} else {
+    $PAGE->set_title('Cursos Bonificados Online - Ciberaula', false);
+}
+// --- FIN CIBERAULA ---
+
 $PAGE->set_heading($heading);
 $content = $courserenderer->course_category($categoryid);
 
