@@ -1,0 +1,150 @@
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* === OCULTAR H1 DUPLICADO DE MOODLE EN CATEGORÍAS === */
+#page-course-index-category .page-header-headings {
+  display: none !important;
+}
+/* === CURSOS EN PAGINA DE CATEGORÍA === */
+#page-course-index-category .coursebox {
+  background: #f8fafb;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 20px 24px;
+  margin-bottom: 16px;
+  transition: all 0.3s ease;
+}
+#page-course-index-category .coursebox:hover {
+  background: #eef3f8;
+  border-color: #E07A5F;
+  box-shadow: 0 4px 16px rgba(27,42,74,0.10);
+  transform: translateY(-2px);
+}
+/* Nombre del curso: grande y destacado */
+#page-course-index-category .coursebox .coursename {
+  font-family: "Outfit", sans-serif !important;
+  font-size: 22px !important;
+  font-weight: 700 !important;
+  color: #1B2A4A !important;
+  margin-bottom: 12px !important;
+  line-height: 1.3 !important;
+}
+#page-course-index-category .coursebox .coursename a {
+  color: #1B2A4A !important;
+  text-decoration: none !important;
+}
+#page-course-index-category .coursebox .coursename a:hover {
+  color: #E07A5F !important;
+}
+/* Etiqueta Objetivos: pequeña con color corporativo */
+#page-course-index-category .coursebox .objetivos h2 {
+  font-family: "Outfit", sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1.5px !important;
+  color: #ffffff !important;
+  background: #E07A5F !important;
+  display: inline-block !important;
+  padding: 4px 14px !important;
+  border-radius: 6px !important;
+  margin-bottom: 10px !important;
+  margin-top: 0 !important;
+}
+
+/* ============================================================
+   RESPONSIVE — FICHAS DE CURSOS EN CATEGORÍA
+   ============================================================ */
+@media (max-width: 768px) {
+  /* Coursebox: menos padding */
+  #page-course-index-category .coursebox {
+    padding: 14px;
+    border-radius: 10px;
+    margin-bottom: 12px;
+  }
+  #page-course-index-category .coursebox:hover {
+    transform: none;
+  }
+
+  /* Nombre del curso: más pequeño */
+  #page-course-index-category .coursebox .coursename {
+    font-size: 17px !important;
+    margin-bottom: 8px !important;
+    line-height: 1.25 !important;
+  }
+
+  /* Layout interno: deshacer floats, apilar verticalmente */
+  #page-course-index-category .coursebox .Apartado-Videos .video,
+  #page-course-index-category .coursebox .Apartado-Videos .objetivos {
+    float: none !important;
+    width: 100% !important;
+    clear: both !important;
+  }
+
+  /* Imagen del curso: primero, centrada, tamaño razonable */
+  #page-course-index-category .coursebox .Apartado-Videos .video {
+    margin-bottom: 10px;
+    text-align: center;
+  }
+
+  #page-course-index-category .coursebox .Apartado-Videos .video img {
+    max-width: 65% !important;
+    height: auto !important;
+    margin: 0 auto;
+    display: block;
+  }
+
+  /* Iframe YouTube: responsive */
+  #page-course-index-category .coursebox .Apartado-Videos .video iframe {
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 16 / 9;
+    max-width: 100%;
+  }
+
+  /* Modalidad: texto más compacto */
+  #page-course-index-category .coursebox .curso-modalidad {
+    font-size: 12px !important;
+    line-height: 1.4 !important;
+    margin: 6px 0 !important;
+  }
+
+  /* Objetivos: texto legible */
+  #page-course-index-category .coursebox .objetivos h2 {
+    font-size: 11px !important;
+    padding: 3px 10px !important;
+    margin-bottom: 8px !important;
+  }
+
+  #page-course-index-category .coursebox .objetivos p,
+  #page-course-index-category .coursebox .objetivos li {
+    font-size: 13px !important;
+    line-height: 1.55 !important;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+  }
+
+  /* Ocultar H1 de Moodle: redundante */
+  #page-course-index-category .page-header-headings {
+    display: none !important;
+  }
+}
+
+@media (max-width: 480px) {
+  #page-course-index-category .coursebox {
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+
+  #page-course-index-category .coursebox .coursename {
+    font-size: 15px !important;
+  }
+
+  #page-course-index-category .coursebox .Apartado-Videos .video img {
+    max-width: 75% !important;
+  }
+
+  #page-course-index-category .coursebox .objetivos p,
+  #page-course-index-category .coursebox .objetivos li {
+    font-size: 12.5px !important;
+  }
+}
+</style>
