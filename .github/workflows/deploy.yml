@@ -17,6 +17,6 @@ jobs:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           REMOTE_HOST: ${{ secrets.SERVER_HOST }}
           REMOTE_USER: ${{ secrets.SERVER_USER }}
-          REMOTE_PORT: ${{ secrets.SERVER_PORT }}
+          REMOTE_PORT: "50050"
           TARGET: ${{ secrets.REMOTE_TARGET }}
-          ARGS: "-rlgoDzvc -i" # Mantiene permisos y sincroniza solo cambios
+          ARGS: "-rlgoDzvc -i"
