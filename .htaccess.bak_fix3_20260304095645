@@ -1,0 +1,1190 @@
+# .htaccess ciberaula.org - Moodle 4.5
+# v3 - 4 marzo 2026 - fix bucle: 3B solo si peticion directa (no reescritura interna)
+
+Options +FollowSymLinks
+RewriteEngine On
+
+# SECCION 3B: URL fea -> URL amigable (301)
+# Solo actua en peticion directa al servidor, no en reescrituras internas
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=3(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-ofimatica? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=4(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-administracion-de-empresas? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=5(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-autocad? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=6(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-idiomas? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=8(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-online-de-excel? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=9(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-ingles? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=11(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-alimentacion-y-hosteleria? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=12(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-diseno-grafico-2d-y-3d? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=13(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-economia-y-finanzas? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=14(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-educacion? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=15(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-euskera? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=16(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-fitosanitarios-y-biocidas? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=18(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-formacion-vial? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=19(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-gestion-y-administracion? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=20(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-habilidades-empresariales? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=23(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-marketing-y-ventas? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=26(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-prevencion-de-riesgos-laborales? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=27(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-online-bonificados-de-proteccion-de-datos? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=28(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-refrigerantes-y-gases-fluorados? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=29(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-retoque-fotografico-y-diseno-editorial? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=30(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-sanidad? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=31(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-sanitarios? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=32(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-seguridad-alimentaria? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=33(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-gestion-normas-iso? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=34(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-tpc? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=35(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-transporte? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=37(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=38(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-en-barcelona? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=39(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-paginas-web-y-programacion? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=47(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-online-de-ingles-basico? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=49(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-online-de-ingles-intermedio? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=50(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-online-de-ingles-avanzado? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=51(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-online-de-ingles-a1? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=52(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-online-de-ingles-a2? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=53(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-online-de-ingles-b1? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=56(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-online-de-office? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=57(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-online-de-office-basico? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=58(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-online-de-office-intermedio? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=59(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-online-de-office-avanzado? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=62(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-online-de-prevencion-de-riesgos-laborales? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=63(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-online-de-ingles-b2? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=66(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-contabilidad? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=67(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-redes-sociales? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=68(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-teletrabajo? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=69(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-enfermeria? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=70(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-competencias-digitales? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=71(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-chino? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=72(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-gestion-ambiental? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=73(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-energias-renovables? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=74(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-electricidad-y-electronica? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=76(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-seguridad-social? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=77(&.*)?$
+RewriteRule ^course\/index\.php$ \/mejores-cursos-de-ingles-online? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=78(&.*)?$
+RewriteRule ^course\/index\.php$ \/fundae-cursos? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=85(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-para-trabajadores-2020? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=89(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-medicina? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=90(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-psicologia? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=91(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-informatica? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=92(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-diseno-3d? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=94(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-linux? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=96(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-online-de-java? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=97(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-big-data? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=98(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-periodismo? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=100(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-online-bonificados-de-seguridad-informatica? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=101(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-online-de-programacion-movil? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=102(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-online-bonificados-de-turismo? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=103(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-online-bonificados-de-robotica? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=105(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-online-bonificados-de-finanzas? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=106(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-online-de-impresion-3d? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=107(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-online-bonificados-de-inteligencia-artificial? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=108(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-online-de-wordpress? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=109(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-online-de-euskera? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=110(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-online-bonificados-de-arabe? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=111(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-auxiliar-de-enfermeria? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=112(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-igualdad-de-genero? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=113(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-plan-de-igualdad-de-genero? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=114(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-online-bonificados-de-ruso? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=117(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-atencion-al-cliente? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=118(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-online-bonificados-de-redes-sociales? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=119(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-online-bonificados-de-cocina? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=120(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-diseno-industrial-cad? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=122(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-online-bonificados-de-Outlook? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=124(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-online-bonificados-de-aleman? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=126(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-online-bonificados-de-criptomonedas? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=127(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-online-bonificados-de-blockchain? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=128(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-criptomonedas? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=129(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-online-de-digitalizacion-en-la-empresa? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=130(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-online-bonificados-de-excel? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=131(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-online-bonificados-de-proteccion-de-datos? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=132(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-online-bonificados-de-python? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=133(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-online-bonificados-de-frances? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=134(&.*)?$
+RewriteRule ^course\/index\.php$ \/opiniones-valoraciones-testimonios? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=135(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-online-de-salud-mental? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=136(&.*)?$
+RewriteRule ^course\/index\.php$ \/aula-empresas? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=137(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-escaparatismo? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=138(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-chatgpt? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=139(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-recursos-humanos? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=140(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-servicios-sociales? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=141(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-logistica? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=142(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-comercio? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=143(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-farmacia? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=144(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-terapia-ocupacional? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=145(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-trabajo-social? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=146(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-drones? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=147(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-mecanica? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=148(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-belleza? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=149(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-psicopedagogia? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=150(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-integracion-social? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=151(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-drogodependencia? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=152(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-logopedia? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=153(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-artes-graficas? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=154(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-agricultura? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=155(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-sonido? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=156(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-telecomunicaciones? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=157(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-gestion-comercial-y-ventas? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=158(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-contenidos-y-proyectos-audiovisuales? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=159(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-fiscalidad? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=160(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-ingenieria? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=161(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-telemarketing? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=162(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-bolsa? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=163(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-medicina-estetica? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=164(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-derecho? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=165(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-comercio-electronico? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=166(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-inteligencia-artificial-creacion-chatbots? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=167(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-inteligencia-artificial-generacion-videos? [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} ^categoryid=168(&.*)?$
+RewriteRule ^course\/index\.php$ \/cursos-bonificados-de-programacion-con-python? [R=301,L]
+
+# Archivos/directorios fisicos: servir directo (despues de 3B)
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule .* - [L]
+
+# SECCION 2: ROUTER MOVIL
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-ofimatica\/? /m/categoria.php?id=3 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-administracion-de-empresas\/? /m/categoria.php?id=4 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-autocad\/? /m/categoria.php?id=5 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-idiomas\/? /m/categoria.php?id=6 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-online-de-excel\/? /m/categoria.php?id=8 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-ingles\/? /m/categoria.php?id=9 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-alimentacion-y-hosteleria\/? /m/categoria.php?id=11 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-diseno-grafico-2d-y-3d\/? /m/categoria.php?id=12 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-economia-y-finanzas\/? /m/categoria.php?id=13 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-educacion\/? /m/categoria.php?id=14 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-euskera\/? /m/categoria.php?id=15 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-fitosanitarios-y-biocidas\/? /m/categoria.php?id=16 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-formacion-vial\/? /m/categoria.php?id=18 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-gestion-y-administracion\/? /m/categoria.php?id=19 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-habilidades-empresariales\/? /m/categoria.php?id=20 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-marketing-y-ventas\/? /m/categoria.php?id=23 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-prevencion-de-riesgos-laborales\/? /m/categoria.php?id=26 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-online-bonificados-de-proteccion-de-datos\/? /m/categoria.php?id=27 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-refrigerantes-y-gases-fluorados\/? /m/categoria.php?id=28 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-retoque-fotografico-y-diseno-editorial\/? /m/categoria.php?id=29 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-sanidad\/? /m/categoria.php?id=30 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-sanitarios\/? /m/categoria.php?id=31 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-seguridad-alimentaria\/? /m/categoria.php?id=32 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-gestion-normas-iso\/? /m/categoria.php?id=33 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-tpc\/? /m/categoria.php?id=34 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-transporte\/? /m/categoria.php?id=35 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados\/? /m/ [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-en-barcelona\/? /m/categoria.php?id=38 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-paginas-web-y-programacion\/? /m/categoria.php?id=39 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-online-de-ingles-basico\/? /m/categoria.php?id=47 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-online-de-ingles-intermedio\/? /m/categoria.php?id=49 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-online-de-ingles-avanzado\/? /m/categoria.php?id=50 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-online-de-ingles-a1\/? /m/categoria.php?id=51 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-online-de-ingles-a2\/? /m/categoria.php?id=52 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-online-de-ingles-b1\/? /m/categoria.php?id=53 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-online-de-office\/? /m/categoria.php?id=56 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-online-de-office-basico\/? /m/categoria.php?id=57 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-online-de-office-intermedio\/? /m/categoria.php?id=58 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-online-de-office-avanzado\/? /m/categoria.php?id=59 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-online-de-prevencion-de-riesgos-laborales\/? /m/categoria.php?id=62 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-online-de-ingles-b2\/? /m/categoria.php?id=63 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-contabilidad\/? /m/categoria.php?id=66 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-redes-sociales\/? /m/categoria.php?id=67 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-teletrabajo\/? /m/categoria.php?id=68 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-enfermeria\/? /m/categoria.php?id=69 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-competencias-digitales\/? /m/categoria.php?id=70 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-chino\/? /m/categoria.php?id=71 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-gestion-ambiental\/? /m/categoria.php?id=72 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-energias-renovables\/? /m/categoria.php?id=73 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-electricidad-y-electronica\/? /m/categoria.php?id=74 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-seguridad-social\/? /m/categoria.php?id=76 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^mejores-cursos-de-ingles-online\/? /m/categoria.php?id=77 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^fundae-cursos\/? /m/categoria.php?id=78 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-para-trabajadores-2020\/? /m/categoria.php?id=85 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-medicina\/? /m/categoria.php?id=89 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-psicologia\/? /m/categoria.php?id=90 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-informatica\/? /m/categoria.php?id=91 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-diseno-3d\/? /m/categoria.php?id=92 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-linux\/? /m/categoria.php?id=94 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-online-de-java\/? /m/categoria.php?id=96 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-big-data\/? /m/categoria.php?id=97 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-periodismo\/? /m/categoria.php?id=98 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-online-bonificados-de-seguridad-informatica\/? /m/categoria.php?id=100 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-online-de-programacion-movil\/? /m/categoria.php?id=101 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-online-bonificados-de-turismo\/? /m/categoria.php?id=102 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-online-bonificados-de-robotica\/? /m/categoria.php?id=103 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-online-bonificados-de-finanzas\/? /m/categoria.php?id=105 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-online-de-impresion-3d\/? /m/categoria.php?id=106 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-online-bonificados-de-inteligencia-artificial\/? /m/categoria.php?id=107 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-online-de-wordpress\/? /m/categoria.php?id=108 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-online-de-euskera\/? /m/categoria.php?id=109 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-online-bonificados-de-arabe\/? /m/categoria.php?id=110 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-auxiliar-de-enfermeria\/? /m/categoria.php?id=111 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-igualdad-de-genero\/? /m/categoria.php?id=112 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-plan-de-igualdad-de-genero\/? /m/categoria.php?id=113 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-online-bonificados-de-ruso\/? /m/categoria.php?id=114 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-atencion-al-cliente\/? /m/categoria.php?id=117 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-online-bonificados-de-redes-sociales\/? /m/categoria.php?id=118 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-online-bonificados-de-cocina\/? /m/categoria.php?id=119 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-diseno-industrial-cad\/? /m/categoria.php?id=120 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-online-bonificados-de-Outlook\/? /m/categoria.php?id=122 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-online-bonificados-de-aleman\/? /m/categoria.php?id=124 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-online-bonificados-de-criptomonedas\/? /m/categoria.php?id=126 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-online-bonificados-de-blockchain\/? /m/categoria.php?id=127 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-criptomonedas\/? /m/categoria.php?id=128 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-online-de-digitalizacion-en-la-empresa\/? /m/categoria.php?id=129 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-online-bonificados-de-excel\/? /m/categoria.php?id=130 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-online-bonificados-de-proteccion-de-datos\/? /m/categoria.php?id=131 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-online-bonificados-de-python\/? /m/categoria.php?id=132 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-online-bonificados-de-frances\/? /m/categoria.php?id=133 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^opiniones-valoraciones-testimonios\/? /m/categoria.php?id=134 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-online-de-salud-mental\/? /m/categoria.php?id=135 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^aula-empresas\/? /m/categoria.php?id=136 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-escaparatismo\/? /m/categoria.php?id=137 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-chatgpt\/? /m/categoria.php?id=138 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-recursos-humanos\/? /m/categoria.php?id=139 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-servicios-sociales\/? /m/categoria.php?id=140 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-logistica\/? /m/categoria.php?id=141 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-comercio\/? /m/categoria.php?id=142 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-farmacia\/? /m/categoria.php?id=143 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-terapia-ocupacional\/? /m/categoria.php?id=144 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-trabajo-social\/? /m/categoria.php?id=145 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-drones\/? /m/categoria.php?id=146 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-mecanica\/? /m/categoria.php?id=147 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-belleza\/? /m/categoria.php?id=148 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-psicopedagogia\/? /m/categoria.php?id=149 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-integracion-social\/? /m/categoria.php?id=150 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-drogodependencia\/? /m/categoria.php?id=151 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-logopedia\/? /m/categoria.php?id=152 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-artes-graficas\/? /m/categoria.php?id=153 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-agricultura\/? /m/categoria.php?id=154 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-sonido\/? /m/categoria.php?id=155 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-telecomunicaciones\/? /m/categoria.php?id=156 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-gestion-comercial-y-ventas\/? /m/categoria.php?id=157 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-contenidos-y-proyectos-audiovisuales\/? /m/categoria.php?id=158 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-fiscalidad\/? /m/categoria.php?id=159 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-ingenieria\/? /m/categoria.php?id=160 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-telemarketing\/? /m/categoria.php?id=161 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-bolsa\/? /m/categoria.php?id=162 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-medicina-estetica\/? /m/categoria.php?id=163 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-derecho\/? /m/categoria.php?id=164 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-comercio-electronico\/? /m/categoria.php?id=165 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-inteligencia-artificial-creacion-chatbots\/? /m/categoria.php?id=166 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-inteligencia-artificial-generacion-videos\/? /m/categoria.php?id=167 [R=302,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
+RewriteRule ^cursos-bonificados-de-programacion-con-python\/? /m/categoria.php?id=168 [R=302,L]
+
+# SECCION 3A: URL amigable -> Moodle interno (reescritura, no redirect)
+RewriteRule ^cursos-bonificados-de-ofimatica\/? course\/index.php?categoryid=3 [L,QSA]
+RewriteRule ^cursos-bonificados-de-administracion-de-empresas\/? course\/index.php?categoryid=4 [L,QSA]
+RewriteRule ^cursos-bonificados-de-autocad\/? course\/index.php?categoryid=5 [L,QSA]
+RewriteRule ^cursos-bonificados-de-idiomas\/? course\/index.php?categoryid=6 [L,QSA]
+RewriteRule ^cursos-online-de-excel\/? course\/index.php?categoryid=8 [L,QSA]
+RewriteRule ^cursos-bonificados-de-ingles\/? course\/index.php?categoryid=9 [L,QSA]
+RewriteRule ^cursos-bonificados-de-alimentacion-y-hosteleria\/? course\/index.php?categoryid=11 [L,QSA]
+RewriteRule ^cursos-bonificados-de-diseno-grafico-2d-y-3d\/? course\/index.php?categoryid=12 [L,QSA]
+RewriteRule ^cursos-bonificados-de-economia-y-finanzas\/? course\/index.php?categoryid=13 [L,QSA]
+RewriteRule ^cursos-bonificados-de-educacion\/? course\/index.php?categoryid=14 [L,QSA]
+RewriteRule ^cursos-bonificados-de-euskera\/? course\/index.php?categoryid=15 [L,QSA]
+RewriteRule ^cursos-bonificados-de-fitosanitarios-y-biocidas\/? course\/index.php?categoryid=16 [L,QSA]
+RewriteRule ^cursos-bonificados-de-formacion-vial\/? course\/index.php?categoryid=18 [L,QSA]
+RewriteRule ^cursos-bonificados-de-gestion-y-administracion\/? course\/index.php?categoryid=19 [L,QSA]
+RewriteRule ^cursos-bonificados-de-habilidades-empresariales\/? course\/index.php?categoryid=20 [L,QSA]
+RewriteRule ^cursos-bonificados-de-marketing-y-ventas\/? course\/index.php?categoryid=23 [L,QSA]
+RewriteRule ^cursos-bonificados-de-prevencion-de-riesgos-laborales\/? course\/index.php?categoryid=26 [L,QSA]
+RewriteRule ^cursos-online-bonificados-de-proteccion-de-datos\/? course\/index.php?categoryid=27 [L,QSA]
+RewriteRule ^cursos-bonificados-de-refrigerantes-y-gases-fluorados\/? course\/index.php?categoryid=28 [L,QSA]
+RewriteRule ^cursos-bonificados-de-retoque-fotografico-y-diseno-editorial\/? course\/index.php?categoryid=29 [L,QSA]
+RewriteRule ^cursos-bonificados-de-sanidad\/? course\/index.php?categoryid=30 [L,QSA]
+RewriteRule ^cursos-bonificados-de-sanitarios\/? course\/index.php?categoryid=31 [L,QSA]
+RewriteRule ^cursos-bonificados-de-seguridad-alimentaria\/? course\/index.php?categoryid=32 [L,QSA]
+RewriteRule ^cursos-bonificados-de-gestion-normas-iso\/? course\/index.php?categoryid=33 [L,QSA]
+RewriteRule ^cursos-bonificados-de-tpc\/? course\/index.php?categoryid=34 [L,QSA]
+RewriteRule ^cursos-bonificados-de-transporte\/? course\/index.php?categoryid=35 [L,QSA]
+RewriteRule ^cursos-bonificados\/? course\/index.php?categoryid=37 [L,QSA]
+RewriteRule ^cursos-bonificados-en-barcelona\/? course\/index.php?categoryid=38 [L,QSA]
+RewriteRule ^cursos-bonificados-de-paginas-web-y-programacion\/? course\/index.php?categoryid=39 [L,QSA]
+RewriteRule ^cursos-online-de-ingles-basico\/? course\/index.php?categoryid=47 [L,QSA]
+RewriteRule ^cursos-online-de-ingles-intermedio\/? course\/index.php?categoryid=49 [L,QSA]
+RewriteRule ^cursos-online-de-ingles-avanzado\/? course\/index.php?categoryid=50 [L,QSA]
+RewriteRule ^cursos-online-de-ingles-a1\/? course\/index.php?categoryid=51 [L,QSA]
+RewriteRule ^cursos-online-de-ingles-a2\/? course\/index.php?categoryid=52 [L,QSA]
+RewriteRule ^cursos-online-de-ingles-b1\/? course\/index.php?categoryid=53 [L,QSA]
+RewriteRule ^cursos-online-de-office\/? course\/index.php?categoryid=56 [L,QSA]
+RewriteRule ^cursos-online-de-office-basico\/? course\/index.php?categoryid=57 [L,QSA]
+RewriteRule ^cursos-online-de-office-intermedio\/? course\/index.php?categoryid=58 [L,QSA]
+RewriteRule ^cursos-online-de-office-avanzado\/? course\/index.php?categoryid=59 [L,QSA]
+RewriteRule ^cursos-online-de-prevencion-de-riesgos-laborales\/? course\/index.php?categoryid=62 [L,QSA]
+RewriteRule ^cursos-online-de-ingles-b2\/? course\/index.php?categoryid=63 [L,QSA]
+RewriteRule ^cursos-bonificados-de-contabilidad\/? course\/index.php?categoryid=66 [L,QSA]
+RewriteRule ^cursos-bonificados-de-redes-sociales\/? course\/index.php?categoryid=67 [L,QSA]
+RewriteRule ^cursos-bonificados-de-teletrabajo\/? course\/index.php?categoryid=68 [L,QSA]
+RewriteRule ^cursos-bonificados-de-enfermeria\/? course\/index.php?categoryid=69 [L,QSA]
+RewriteRule ^cursos-bonificados-de-competencias-digitales\/? course\/index.php?categoryid=70 [L,QSA]
+RewriteRule ^cursos-bonificados-de-chino\/? course\/index.php?categoryid=71 [L,QSA]
+RewriteRule ^cursos-bonificados-de-gestion-ambiental\/? course\/index.php?categoryid=72 [L,QSA]
+RewriteRule ^cursos-bonificados-de-energias-renovables\/? course\/index.php?categoryid=73 [L,QSA]
+RewriteRule ^cursos-bonificados-de-electricidad-y-electronica\/? course\/index.php?categoryid=74 [L,QSA]
+RewriteRule ^cursos-bonificados-seguridad-social\/? course\/index.php?categoryid=76 [L,QSA]
+RewriteRule ^mejores-cursos-de-ingles-online\/? course\/index.php?categoryid=77 [L,QSA]
+RewriteRule ^fundae-cursos\/? course\/index.php?categoryid=78 [L,QSA]
+RewriteRule ^cursos-bonificados-para-trabajadores-2020\/? course\/index.php?categoryid=85 [L,QSA]
+RewriteRule ^cursos-bonificados-de-medicina\/? course\/index.php?categoryid=89 [L,QSA]
+RewriteRule ^cursos-bonificados-de-psicologia\/? course\/index.php?categoryid=90 [L,QSA]
+RewriteRule ^cursos-bonificados-de-informatica\/? course\/index.php?categoryid=91 [L,QSA]
+RewriteRule ^cursos-bonificados-de-diseno-3d\/? course\/index.php?categoryid=92 [L,QSA]
+RewriteRule ^cursos-bonificados-de-linux\/? course\/index.php?categoryid=94 [L,QSA]
+RewriteRule ^cursos-online-de-java\/? course\/index.php?categoryid=96 [L,QSA]
+RewriteRule ^cursos-bonificados-de-big-data\/? course\/index.php?categoryid=97 [L,QSA]
+RewriteRule ^cursos-bonificados-de-periodismo\/? course\/index.php?categoryid=98 [L,QSA]
+RewriteRule ^cursos-online-bonificados-de-seguridad-informatica\/? course\/index.php?categoryid=100 [L,QSA]
+RewriteRule ^cursos-online-de-programacion-movil\/? course\/index.php?categoryid=101 [L,QSA]
+RewriteRule ^cursos-online-bonificados-de-turismo\/? course\/index.php?categoryid=102 [L,QSA]
+RewriteRule ^cursos-online-bonificados-de-robotica\/? course\/index.php?categoryid=103 [L,QSA]
+RewriteRule ^cursos-online-bonificados-de-finanzas\/? course\/index.php?categoryid=105 [L,QSA]
+RewriteRule ^cursos-online-de-impresion-3d\/? course\/index.php?categoryid=106 [L,QSA]
+RewriteRule ^cursos-online-bonificados-de-inteligencia-artificial\/? course\/index.php?categoryid=107 [L,QSA]
+RewriteRule ^cursos-online-de-wordpress\/? course\/index.php?categoryid=108 [L,QSA]
+RewriteRule ^cursos-online-de-euskera\/? course\/index.php?categoryid=109 [L,QSA]
+RewriteRule ^cursos-online-bonificados-de-arabe\/? course\/index.php?categoryid=110 [L,QSA]
+RewriteRule ^cursos-bonificados-de-auxiliar-de-enfermeria\/? course\/index.php?categoryid=111 [L,QSA]
+RewriteRule ^cursos-bonificados-de-igualdad-de-genero\/? course\/index.php?categoryid=112 [L,QSA]
+RewriteRule ^cursos-bonificados-de-plan-de-igualdad-de-genero\/? course\/index.php?categoryid=113 [L,QSA]
+RewriteRule ^cursos-online-bonificados-de-ruso\/? course\/index.php?categoryid=114 [L,QSA]
+RewriteRule ^cursos-bonificados-de-atencion-al-cliente\/? course\/index.php?categoryid=117 [L,QSA]
+RewriteRule ^cursos-online-bonificados-de-redes-sociales\/? course\/index.php?categoryid=118 [L,QSA]
+RewriteRule ^cursos-online-bonificados-de-cocina\/? course\/index.php?categoryid=119 [L,QSA]
+RewriteRule ^cursos-bonificados-de-diseno-industrial-cad\/? course\/index.php?categoryid=120 [L,QSA]
+RewriteRule ^cursos-online-bonificados-de-Outlook\/? course\/index.php?categoryid=122 [L,QSA]
+RewriteRule ^cursos-online-bonificados-de-aleman\/? course\/index.php?categoryid=124 [L,QSA]
+RewriteRule ^cursos-online-bonificados-de-criptomonedas\/? course\/index.php?categoryid=126 [L,QSA]
+RewriteRule ^cursos-online-bonificados-de-blockchain\/? course\/index.php?categoryid=127 [L,QSA]
+RewriteRule ^cursos-bonificados-de-criptomonedas\/? course\/index.php?categoryid=128 [L,QSA]
+RewriteRule ^cursos-bonificados-online-de-digitalizacion-en-la-empresa\/? course\/index.php?categoryid=129 [L,QSA]
+RewriteRule ^cursos-online-bonificados-de-excel\/? course\/index.php?categoryid=130 [L,QSA]
+RewriteRule ^cursos-online-bonificados-de-proteccion-de-datos\/? course\/index.php?categoryid=131 [L,QSA]
+RewriteRule ^cursos-online-bonificados-de-python\/? course\/index.php?categoryid=132 [L,QSA]
+RewriteRule ^cursos-online-bonificados-de-frances\/? course\/index.php?categoryid=133 [L,QSA]
+RewriteRule ^opiniones-valoraciones-testimonios\/? course\/index.php?categoryid=134 [L,QSA]
+RewriteRule ^cursos-bonificados-online-de-salud-mental\/? course\/index.php?categoryid=135 [L,QSA]
+RewriteRule ^aula-empresas\/? course\/index.php?categoryid=136 [L,QSA]
+RewriteRule ^cursos-bonificados-de-escaparatismo\/? course\/index.php?categoryid=137 [L,QSA]
+RewriteRule ^cursos-bonificados-de-chatgpt\/? course\/index.php?categoryid=138 [L,QSA]
+RewriteRule ^cursos-bonificados-de-recursos-humanos\/? course\/index.php?categoryid=139 [L,QSA]
+RewriteRule ^cursos-bonificados-de-servicios-sociales\/? course\/index.php?categoryid=140 [L,QSA]
+RewriteRule ^cursos-bonificados-de-logistica\/? course\/index.php?categoryid=141 [L,QSA]
+RewriteRule ^cursos-bonificados-de-comercio\/? course\/index.php?categoryid=142 [L,QSA]
+RewriteRule ^cursos-bonificados-de-farmacia\/? course\/index.php?categoryid=143 [L,QSA]
+RewriteRule ^cursos-bonificados-de-terapia-ocupacional\/? course\/index.php?categoryid=144 [L,QSA]
+RewriteRule ^cursos-bonificados-de-trabajo-social\/? course\/index.php?categoryid=145 [L,QSA]
+RewriteRule ^cursos-bonificados-de-drones\/? course\/index.php?categoryid=146 [L,QSA]
+RewriteRule ^cursos-bonificados-de-mecanica\/? course\/index.php?categoryid=147 [L,QSA]
+RewriteRule ^cursos-bonificados-de-belleza\/? course\/index.php?categoryid=148 [L,QSA]
+RewriteRule ^cursos-bonificados-de-psicopedagogia\/? course\/index.php?categoryid=149 [L,QSA]
+RewriteRule ^cursos-bonificados-de-integracion-social\/? course\/index.php?categoryid=150 [L,QSA]
+RewriteRule ^cursos-bonificados-de-drogodependencia\/? course\/index.php?categoryid=151 [L,QSA]
+RewriteRule ^cursos-bonificados-de-logopedia\/? course\/index.php?categoryid=152 [L,QSA]
+RewriteRule ^cursos-bonificados-de-artes-graficas\/? course\/index.php?categoryid=153 [L,QSA]
+RewriteRule ^cursos-bonificados-de-agricultura\/? course\/index.php?categoryid=154 [L,QSA]
+RewriteRule ^cursos-bonificados-de-sonido\/? course\/index.php?categoryid=155 [L,QSA]
+RewriteRule ^cursos-bonificados-de-telecomunicaciones\/? course\/index.php?categoryid=156 [L,QSA]
+RewriteRule ^cursos-bonificados-de-gestion-comercial-y-ventas\/? course\/index.php?categoryid=157 [L,QSA]
+RewriteRule ^cursos-bonificados-de-contenidos-y-proyectos-audiovisuales\/? course\/index.php?categoryid=158 [L,QSA]
+RewriteRule ^cursos-bonificados-de-fiscalidad\/? course\/index.php?categoryid=159 [L,QSA]
+RewriteRule ^cursos-bonificados-de-ingenieria\/? course\/index.php?categoryid=160 [L,QSA]
+RewriteRule ^cursos-bonificados-de-telemarketing\/? course\/index.php?categoryid=161 [L,QSA]
+RewriteRule ^cursos-bonificados-de-bolsa\/? course\/index.php?categoryid=162 [L,QSA]
+RewriteRule ^cursos-bonificados-de-medicina-estetica\/? course\/index.php?categoryid=163 [L,QSA]
+RewriteRule ^cursos-bonificados-de-derecho\/? course\/index.php?categoryid=164 [L,QSA]
+RewriteRule ^cursos-bonificados-de-comercio-electronico\/? course\/index.php?categoryid=165 [L,QSA]
+RewriteRule ^cursos-bonificados-de-inteligencia-artificial-creacion-chatbots\/? course\/index.php?categoryid=166 [L,QSA]
+RewriteRule ^cursos-bonificados-de-inteligencia-artificial-generacion-videos\/? course\/index.php?categoryid=167 [L,QSA]
+RewriteRule ^cursos-bonificados-de-programacion-con-python\/? course\/index.php?categoryid=168 [L,QSA]
+
+# ALIAS
+RewriteRule ^cursos-bonificados-de-inteligencia-artificial\/? \/cursos-online-bonificados-de-inteligencia-artificial\/ [R=301,L]
+RewriteRule ^cursos-bonificados-de-internet-y-redes-locales\/? \/cursos-bonificados-de-competencias-digitales\/ [R=301,L]
+RewriteRule ^cursos-online-de-ingles\/? course\/index.php?categoryid=9 [L,QSA]
+RewriteRule ^cursos-online-de-office-2016\/? course\/index.php?categoryid=56 [L,QSA]
+RewriteRule ^cursos-online-de-office-2019\/? course\/index.php?categoryid=56 [L,QSA]
+RewriteRule ^cursos-bonificados-de-programacion\/? course\/index.php?categoryid=39 [L,QSA]
+RewriteRule ^cursos-bonificados-de-formacion-en-tecnologias-de-la-informacion-y-comunicacion\/? course\/index.php?categoryid=91 [L,QSA]
+RewriteRule ^cursos-bonificados-de-habilidades-empresariales-para-nuevas-tecnologias\/? course\/index.php?categoryid=20 [L,QSA]
+RewriteRule ^cursos-online-bonificados-de-maquillaje\/? course\/index.php?categoryid=148 [L,QSA]
+RewriteRule ^cursos-online-bonificados-de-maquillaje-social\/? course\/index.php?categoryid=148 [L,QSA]
+RewriteRule ^cursos-bonificados-online-de-prevencion-del-covid-19\/? course\/index.php?categoryid=26 [L,QSA]
+RewriteRule ^cursos-bonificados-de-competencias-claves\/? course\/index.php?categoryid=70 [L,QSA]
+RewriteRule ^cursos-online-para-autonomos\/? course\/index.php?categoryid=37 [L,QSA]
+RewriteRule ^cursos-online-bonificados-de-consumo-y-comercio\/? course\/index.php?categoryid=23 [L,QSA]
+RewriteRule ^cursos-online-bonificados-de-habilidades-blandas\/? course\/index.php?categoryid=20 [L,QSA]
+RewriteRule ^cursos-bonificados-de-oficios\/? course\/index.php?categoryid=37 [L,QSA]
+
+# SECCION 4: PAGINAS ESTATICAS
+RewriteRule ^nuestros-clientes\/? mod\/page\/view.php?id=1 [L,QSA]
+
+# SECCION 5: BLOG -> ciberaula.com
+RewriteRule ^el-plazo-previo-para-comunicar-un-curso-bonificado-por-fundae-sera-de-2-dias\/? https:\/\/www.ciberaula.com\/catalogo [R=301,L]
+RewriteRule ^la-comunicacion-de-finalizacion-de-los-cursos-de-formacion-bonificada\/? https:\/\/www.ciberaula.com\/catalogo [R=301,L]
+RewriteRule ^que-es-fundae-y-como-funciona\/? https:\/\/www.ciberaula.com\/catalogo [R=301,L]
+RewriteRule ^becas-de-google-y-fundae-para-cursar-certificado-profesional\/? https:\/\/www.ciberaula.com\/catalogo [R=301,L]
+RewriteRule ^como-solicitar-la-formacion-bonificada-para-un-curso-online\/? https:\/\/www.ciberaula.com\/catalogo [R=301,L]
+RewriteRule ^5-ventajas-de-la-formacion-bonificada-para-empresas\/? https:\/\/www.ciberaula.com\/catalogo [R=301,L]
+RewriteRule ^que-requisitos-deben-cumplir-los-cursos-bonificados-de-la-fundae\/? https:\/\/www.ciberaula.com\/catalogo [R=301,L]
+RewriteRule ^metodologia-de-formacion\/? https:\/\/www.ciberaula.com\/catalogo [R=301,L]
+RewriteRule ^cursos-online-bonificados\/? https:\/\/www.ciberaula.com\/catalogo [R=301,L]
+RewriteRule ^la-formacion-corporativa-en-la-crisis-del-covid-19\/? https:\/\/www.ciberaula.com\/catalogo [R=301,L]
+RewriteRule ^5-pasos-para-iniciar-un-proceso-de-transformacion-digital-en-nuestra-organizacion\/? https:\/\/www.ciberaula.com\/catalogo [R=301,L]
+RewriteRule ^ejercicio-2022-aplicacion-de-formacion-programada-por-las-empresas\/? https:\/\/www.ciberaula.com\/catalogo [R=301,L]
+RewriteRule ^el-plan-anual-de-politica-de-empleo-2022\/? https:\/\/www.ciberaula.com\/catalogo [R=301,L]
+RewriteRule ^fundae-actualizacion-creditos-2022\/? https:\/\/www.ciberaula.com\/catalogo [R=301,L]
+RewriteRule ^beneficios-de-formar-trabajadores-afectados-por-un-erte\/? https:\/\/www.ciberaula.com\/catalogo [R=301,L]
+RewriteRule ^fundacion-endesa-sepe-y-fundae-comprometidos-con-aprendizaje-de-competencias-digitales\/? https:\/\/www.ciberaula.com\/catalogo [R=301,L]
+RewriteRule ^preparar-oposiciones-online\/? https:\/\/www.ciberaula.com\/catalogo [R=301,L]
+RewriteRule ^oposiciones-madrid\/? https:\/\/www.ciberaula.com\/catalogo [R=301,L]
+RewriteRule ^oposiciones-cursos-homologados\/? https:\/\/www.ciberaula.com\/catalogo [R=301,L]
+RewriteRule ^oposiciones-correos-2021\/? https:\/\/www.ciberaula.com\/catalogo [R=301,L]
+RewriteRule ^oposiciones-guardia-civil\/? https:\/\/www.ciberaula.com\/catalogo [R=301,L]
+RewriteRule ^clases-particulares-online\/? https:\/\/www.ciberaula.com\/catalogo [R=301,L]
+RewriteRule ^contratar-aula-virtual\/? https:\/\/www.ciberaula.com\/catalogo [R=301,L]
+RewriteRule ^cursos-puntuables-oposiciones-correos\/? https:\/\/www.ciberaula.com\/catalogo [R=301,L]
+RewriteRule ^curso-bonificado-de-pintor\/? https:\/\/www.ciberaula.com\/catalogo [R=301,L]
+
+# FIN .htaccess - ciberaula.org Moodle 4.5 v3

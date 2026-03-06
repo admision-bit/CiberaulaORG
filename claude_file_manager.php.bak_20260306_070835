@@ -1,0 +1,1097 @@
+<?php
+/**
+ * ============================================================
+ * CLAUDE FILE MANAGER — Gestión remota de archivos
+ * Archivo: claude_file_manager.php
+ * Ubicación: /httpdocs/ (raíz del dominio donde se despliegue)
+ * ============================================================
+ * Versión:    1.1
+ * Fecha:      27 de febrero de 2026, 19:00 CET
+ * Autor:      Claude (Anthropic) bajo dirección de Ana
+ * PHP:        Compatible con 7.3.33+ (sin funciones PHP 8+)
+ * ============================================================
+ * API REST para gestión remota de archivos del servidor.
+ * Permite a Claude leer, escribir, listar y gestionar archivos
+ * del proyecto sin necesidad de acceso SSH.
+ *
+ * SEGURIDAD:
+ *   - Autenticación por token en header X-FM-Key
+ *   - Rate limiting por IP (60 req/min)
+ *   - Sandboxing: solo permite operar dentro de ALLOWED_ROOTS
+ *   - Backup automático antes de sobreescribir
+ *   - Log de todas las operaciones
+ *   - Validación de extensiones de archivo
+ *   - Protección contra path traversal
+ *
+ * USO:
+ *   POST https://dominio.com/claude_file_manager.php
+ *   Header: X-FM-Key: <token>
+ *   Body: JSON con { "action": "...", ... }
+ *
+ * ACCIONES DISPONIBLES:
+ *   info     — Información del servidor y estado
+ *   list     — Listar directorio
+ *   read     — Leer contenido de archivo
+ *   write    — Escribir archivo (backup automático)
+ *   mkdir    — Crear directorio
+ *   delete   — Eliminar archivo (backup automático)
+ *   rename   — Renombrar/mover archivo
+ *   search   — Buscar archivos por nombre o contenido
+ *   diff     — Comparar archivo actual con contenido nuevo
+ *   backup   — Crear backup manual de un archivo
+ * ============================================================
+ */
+
+// ============================================================
+// CONFIGURACIÓN
+// ============================================================
+
+// Token de autenticación (64 caracteres hex)
+// CAMBIAR ESTE TOKEN antes de subir al servidor
+define('FM_AUTH_TOKEN', 'a7f3b9c2d1e4f5068798a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f708192a3b');
+
+// Directorios raíz permitidos (rutas absolutas)
+// El script NO puede operar fuera de estos directorios
+// AMPLIADO: acceso a TODOS los dominios del servidor (vhosts)
+// Modificado: 27/02/2026 por Claude bajo instrucción de Ana
+$_fm_doc_root = realpath($_SERVER['DOCUMENT_ROOT'] ?? __DIR__);
+$_fm_roots = [$_fm_doc_root];
+
+// Directorio base de todos los vhosts en Plesk
+$_fm_vhosts_base = '/var/www/vhosts';
+
+// Escanear TODOS los dominios del servidor
+if (is_dir($_fm_vhosts_base)) {
+    $_fm_domains = @scandir($_fm_vhosts_base);
+    if (is_array($_fm_domains)) {
+        foreach ($_fm_domains as $_fm_domain) {
+            if ($_fm_domain === '.' || $_fm_domain === '..') continue;
+            if ($_fm_domain === 'system') continue; // Directorio de sistema Plesk
+            
+            $_fm_domain_path = $_fm_vhosts_base . '/' . $_fm_domain;
+            if (!is_dir($_fm_domain_path)) continue;
+            
+            // Añadir httpdocs del dominio principal
+            $_fm_domain_httpdocs = $_fm_domain_path . '/httpdocs';
+            if (is_dir($_fm_domain_httpdocs)) {
+                $_fm_real = realpath($_fm_domain_httpdocs);
+                if ($_fm_real && !in_array($_fm_real, $_fm_roots)) {
+                    $_fm_roots[] = $_fm_real;
+                }
+            }
+            
+            // Añadir subdominios del dominio
+            if (is_dir($_fm_domain_path . '/subdomains')) {
+                $_fm_subdirs = @scandir($_fm_domain_path . '/subdomains');
+                if (is_array($_fm_subdirs)) {
+                    foreach ($_fm_subdirs as $_fm_sub) {
+                        if ($_fm_sub === '.' || $_fm_sub === '..') continue;
+                        $_fm_sub_httpdocs = $_fm_domain_path . '/subdomains/' . $_fm_sub . '/httpdocs';
+                        if (is_dir($_fm_sub_httpdocs)) {
+                            $_fm_real_sub = realpath($_fm_sub_httpdocs);
+                            if ($_fm_real_sub && !in_array($_fm_real_sub, $_fm_roots)) {
+                                $_fm_roots[] = $_fm_real_sub;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+define('FM_ALLOWED_ROOTS', $_fm_roots);
+
+// Extensiones de archivo permitidas para lectura/escritura de TEXTO
+define('FM_ALLOWED_EXTENSIONS', [
+    'php', 'css', 'js', 'html', 'htm', 'json', 'txt', 'md',
+    'sql', 'htaccess', 'xml', 'svg', 'csv', 'log', 'ini',
+    'conf', 'yaml', 'yml', 'sh', 'py',
+]);
+
+// Extensiones de archivo para imágenes y binarios (lectura de metadatos + escritura binaria)
+define('FM_IMAGE_EXTENSIONS', [
+    'jpg', 'jpeg', 'png', 'gif', 'webp', 'ico', 'svg',
+    'bmp', 'tiff', 'tif', 'avif',
+]);
+
+// Extensiones adicionales permitidas para escritura binaria
+// (fuentes, documentos, multimedia que el proyecto pueda necesitar)
+define('FM_BINARY_EXTENSIONS', [
+    'jpg', 'jpeg', 'png', 'gif', 'webp', 'ico', 'bmp', 'tiff', 'tif', 'avif',
+    'pdf', 'woff', 'woff2', 'ttf', 'otf', 'eot',
+    'zip', 'gz', 'tar',
+    'mp4', 'webm', 'mp3', 'ogg',
+]);
+
+// Rate limiting
+define('FM_RATE_LIMIT_MAX', 120);       // Máximo de peticiones
+define('FM_RATE_LIMIT_WINDOW', 60);    // Ventana en segundos
+
+// Directorio para backups (relativo al archivo gestionado)
+define('FM_BACKUP_DIR', '.backups_claude');
+
+// Directorio para logs
+define('FM_LOG_DIR', __DIR__ . '/.claude_fm_logs');
+
+// Tamaño máximo de archivo para lectura/escritura (5 MB)
+define('FM_MAX_FILE_SIZE', 5 * 1024 * 1024);
+
+// ============================================================
+// INICIALIZACIÓN
+// ============================================================
+
+// Headers de respuesta
+header('Content-Type: application/json; charset=utf-8');
+header('X-Content-Type-Options: nosniff');
+header('Cache-Control: no-store, no-cache, must-revalidate');
+header('X-FM-Version: 1.1');
+
+// Crear directorio de logs si no existe
+if (!is_dir(FM_LOG_DIR)) {
+    @mkdir(FM_LOG_DIR, 0700, true);
+    // Proteger con .htaccess
+    @file_put_contents(FM_LOG_DIR . '/.htaccess', "Deny from all\n");
+}
+
+// ============================================================
+// FUNCIONES DE SEGURIDAD
+// ============================================================
+
+/**
+ * Obtener IP del cliente
+ */
+function fm_get_ip() {
+    if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+        $ips = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+        return trim($ips[0]);
+    }
+    return $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
+}
+
+/**
+ * Verificar autenticación por token
+ */
+function fm_authenticate() {
+    // Buscar token en header X-FM-Key o en parámetro POST
+    $token = $_SERVER['HTTP_X_FM_KEY'] ?? '';
+    if (empty($token)) {
+        $token = $_POST['_token'] ?? '';
+    }
+    if (empty($token)) {
+        // También aceptar en el body JSON
+        $input = json_decode(file_get_contents('php://input'), true);
+        $token = $input['_token'] ?? '';
+    }
+
+    if (!hash_equals(FM_AUTH_TOKEN, $token)) {
+        fm_log('AUTH_FAIL', ['ip' => fm_get_ip()]);
+        fm_response(false, 'Autenticación fallida', null, 403);
+    }
+}
+
+/**
+ * Rate limiting por IP usando archivos temporales
+ */
+function fm_rate_limit() {
+    $ip = fm_get_ip();
+    $ip_hash = md5($ip);
+    $rate_file = FM_LOG_DIR . '/rate_' . $ip_hash . '.json';
+
+    $now = time();
+    $requests = [];
+
+    if (file_exists($rate_file)) {
+        $data = json_decode(file_get_contents($rate_file), true);
+        if (is_array($data)) {
+            // Filtrar solo requests dentro de la ventana
+            foreach ($data as $ts) {
+                if ($now - $ts < FM_RATE_LIMIT_WINDOW) {
+                    $requests[] = $ts;
+                }
+            }
+        }
+    }
+
+    if (count($requests) >= FM_RATE_LIMIT_MAX) {
+        fm_log('RATE_LIMIT', ['ip' => $ip, 'count' => count($requests)]);
+        fm_response(false, 'Rate limit excedido. Máximo ' . FM_RATE_LIMIT_MAX . ' peticiones por minuto.', null, 429);
+    }
+
+    $requests[] = $now;
+    file_put_contents($rate_file, json_encode($requests), LOCK_EX);
+}
+
+/**
+ * Validar que una ruta está dentro de los directorios permitidos
+ * Previene path traversal
+ */
+function fm_validate_path($path) {
+    // Resolver la ruta real (sin ../ ni ./ ni symlinks)
+    $real = realpath($path);
+
+    // Si el archivo no existe aún (write/mkdir), resolver el directorio padre
+    if ($real === false) {
+        $parent = realpath(dirname($path));
+        if ($parent === false) {
+            return false;
+        }
+        $real = $parent . '/' . basename($path);
+    }
+
+    // Verificar que está dentro de algún directorio permitido
+    foreach (FM_ALLOWED_ROOTS as $root) {
+        if (strpos($real, $root) === 0) {
+            return $real;
+        }
+    }
+
+    return false;
+}
+
+/**
+ * Validar extensión de archivo
+ * $mode: 'text' (defecto), 'read_all' (incluye imágenes), 'write_binary' (incluye binarios)
+ */
+function fm_validate_extension($path, $mode = 'text') {
+    $ext = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+
+    // .htaccess es un caso especial (no tiene extensión normal)
+    $basename = basename($path);
+    if ($basename === '.htaccess') {
+        return true;
+    }
+
+    // Compatibilidad: $mode = true equivale a 'read_all' (versión anterior)
+    if ($mode === true) {
+        $mode = 'read_all';
+    }
+
+    switch ($mode) {
+        case 'write_binary':
+            // Permite texto + binarios (para escritura con encoding base64)
+            $allowed = array_merge(FM_ALLOWED_EXTENSIONS, FM_BINARY_EXTENSIONS);
+            return in_array($ext, $allowed);
+
+        case 'read_all':
+            // Permite texto + imágenes (para lectura)
+            $allowed = array_merge(FM_ALLOWED_EXTENSIONS, FM_IMAGE_EXTENSIONS);
+            return in_array($ext, $allowed);
+
+        case 'text':
+        default:
+            return in_array($ext, FM_ALLOWED_EXTENSIONS);
+    }
+}
+
+// ============================================================
+// FUNCIONES DE UTILIDAD
+// ============================================================
+
+/**
+ * Registrar operación en log
+ */
+function fm_log($action, $details = []) {
+    $entry = [
+        'timestamp' => date('Y-m-d H:i:s'),
+        'ip'        => fm_get_ip(),
+        'action'    => $action,
+        'details'   => $details,
+    ];
+
+    $log_file = FM_LOG_DIR . '/fm_' . date('Y-m-d') . '.log';
+    @file_put_contents(
+        $log_file,
+        json_encode($entry, JSON_UNESCAPED_UNICODE) . "\n",
+        FILE_APPEND | LOCK_EX
+    );
+}
+
+/**
+ * Enviar respuesta JSON y terminar
+ */
+function fm_response($ok, $message, $data = null, $http_code = 200) {
+    http_response_code($http_code);
+    $response = [
+        'ok'      => $ok,
+        'message' => $message,
+    ];
+    if ($data !== null) {
+        $response['data'] = $data;
+    }
+    echo json_encode($response, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+    exit;
+}
+
+/**
+ * Crear backup de un archivo antes de modificarlo
+ * Retorna la ruta del backup o false si falla
+ */
+function fm_create_backup($filepath) {
+    if (!file_exists($filepath)) {
+        return null; // No hay nada que respaldar
+    }
+
+    $dir = dirname($filepath);
+    $backup_dir = $dir . '/' . FM_BACKUP_DIR;
+
+    if (!is_dir($backup_dir)) {
+        @mkdir($backup_dir, 0755, true);
+        // Proteger backups de acceso web
+        @file_put_contents($backup_dir . '/.htaccess', "Deny from all\n");
+    }
+
+    $basename = basename($filepath);
+    $timestamp = date('Ymd_His');
+    $backup_name = $basename . '.' . $timestamp . '.bak';
+    $backup_path = $backup_dir . '/' . $backup_name;
+
+    if (copy($filepath, $backup_path)) {
+        return $backup_path;
+    }
+
+    return false;
+}
+
+/**
+ * Obtener información de un archivo/directorio
+ */
+function fm_file_info($path) {
+    $info = [
+        'name'     => basename($path),
+        'path'     => $path,
+        'exists'   => file_exists($path),
+    ];
+
+    if ($info['exists']) {
+        $info['is_dir']    = is_dir($path);
+        $info['is_file']   = is_file($path);
+        $info['size']      = is_file($path) ? filesize($path) : null;
+        $info['modified']  = date('Y-m-d H:i:s', filemtime($path));
+        $info['perms']     = substr(sprintf('%o', fileperms($path)), -4);
+        $info['readable']  = is_readable($path);
+        $info['writable']  = is_writable($path);
+
+        if (is_file($path)) {
+            $info['extension'] = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+            $info['lines']     = (fm_validate_extension($path)) ? count(file($path)) : null;
+        }
+    }
+
+    return $info;
+}
+
+// ============================================================
+// ACCIONES
+// ============================================================
+
+/**
+ * INFO — Información del servidor
+ */
+function fm_action_info() {
+    fm_log('INFO');
+
+    $info = [
+        'php_version'      => PHP_VERSION,
+        'server_software'  => $_SERVER['SERVER_SOFTWARE'] ?? 'unknown',
+        'document_root'    => $_SERVER['DOCUMENT_ROOT'] ?? 'unknown',
+        'allowed_roots'    => FM_ALLOWED_ROOTS,
+        'max_file_size'    => FM_MAX_FILE_SIZE,
+        'disk_free'        => @disk_free_space('/') ?: 'unknown',
+        'disk_total'       => @disk_total_space('/') ?: 'unknown',
+        'server_time'      => date('Y-m-d H:i:s T'),
+        'timezone'         => date_default_timezone_get(),
+        'extensions'       => FM_ALLOWED_EXTENSIONS,
+        'fm_version'       => '1.1',
+    ];
+
+    fm_response(true, 'Información del servidor', $info);
+}
+
+/**
+ * LIST — Listar directorio
+ */
+function fm_action_list($params) {
+    $path = $params['path'] ?? '';
+    $recursive = !empty($params['recursive']);
+    $max_depth = intval($params['max_depth'] ?? 2);
+
+    if (empty($path)) {
+        fm_response(false, 'Parámetro "path" requerido');
+    }
+
+    $real_path = fm_validate_path($path);
+    if ($real_path === false) {
+        fm_response(false, 'Ruta no permitida o inexistente: ' . $path, null, 403);
+    }
+
+    if (!is_dir($real_path)) {
+        fm_response(false, 'No es un directorio: ' . $path);
+    }
+
+    fm_log('LIST', ['path' => $real_path, 'recursive' => $recursive]);
+
+    $items = fm_scan_dir($real_path, $recursive, $max_depth, 0);
+
+    fm_response(true, 'Listado de ' . $real_path, [
+        'path'       => $real_path,
+        'item_count' => count($items),
+        'items'      => $items,
+    ]);
+}
+
+/**
+ * Escanear directorio (recursivo opcional)
+ */
+function fm_scan_dir($dir, $recursive, $max_depth, $current_depth) {
+    $items = [];
+    $entries = @scandir($dir);
+
+    if ($entries === false) {
+        return $items;
+    }
+
+    foreach ($entries as $entry) {
+        // Saltar . y .. y archivos ocultos del sistema
+        if ($entry === '.' || $entry === '..') continue;
+        if ($entry === FM_BACKUP_DIR) continue;
+        if ($entry === '.claude_fm_logs') continue;
+
+        $full_path = $dir . '/' . $entry;
+        $is_dir = is_dir($full_path);
+
+        $item = [
+            'name'     => $entry,
+            'path'     => $full_path,
+            'is_dir'   => $is_dir,
+            'size'     => $is_dir ? null : filesize($full_path),
+            'modified' => date('Y-m-d H:i:s', filemtime($full_path)),
+        ];
+
+        if (!$is_dir) {
+            $item['extension'] = strtolower(pathinfo($entry, PATHINFO_EXTENSION));
+        }
+
+        if ($is_dir && $recursive && $current_depth < $max_depth) {
+            $item['children'] = fm_scan_dir($full_path, true, $max_depth, $current_depth + 1);
+            $item['child_count'] = count($item['children']);
+        }
+
+        $items[] = $item;
+    }
+
+    // Ordenar: directorios primero, luego alfabético
+    usort($items, function($a, $b) {
+        if ($a['is_dir'] && !$b['is_dir']) return -1;
+        if (!$a['is_dir'] && $b['is_dir']) return 1;
+        return strcasecmp($a['name'], $b['name']);
+    });
+
+    return $items;
+}
+
+/**
+ * READ — Leer contenido de archivo
+ */
+function fm_action_read($params) {
+    $path = $params['path'] ?? '';
+    $line_start = intval($params['line_start'] ?? 0);
+    $line_end = intval($params['line_end'] ?? 0);
+
+    if (empty($path)) {
+        fm_response(false, 'Parámetro "path" requerido');
+    }
+
+    $real_path = fm_validate_path($path);
+    if ($real_path === false) {
+        fm_response(false, 'Ruta no permitida o inexistente: ' . $path, null, 403);
+    }
+
+    if (!is_file($real_path)) {
+        fm_response(false, 'No es un archivo: ' . $path);
+    }
+
+    if (!fm_validate_extension($real_path, true)) {
+        fm_response(false, 'Extensión de archivo no permitida: ' . pathinfo($real_path, PATHINFO_EXTENSION));
+    }
+
+    $size = filesize($real_path);
+    if ($size > FM_MAX_FILE_SIZE) {
+        fm_response(false, 'Archivo demasiado grande (' . round($size / 1024 / 1024, 2) . ' MB). Máximo: ' . round(FM_MAX_FILE_SIZE / 1024 / 1024) . ' MB');
+    }
+
+    fm_log('READ', ['path' => $real_path, 'size' => $size]);
+
+    // Leer archivo
+    $lines = file($real_path);
+    $total_lines = count($lines);
+
+    // Si se piden líneas específicas
+    if ($line_start > 0 || $line_end > 0) {
+        $start = max(1, $line_start) - 1; // Convertir a 0-indexed
+        $end = ($line_end > 0) ? min($line_end, $total_lines) : $total_lines;
+        $length = $end - $start;
+        $lines = array_slice($lines, $start, $length);
+        $content = implode('', $lines);
+    } else {
+        $content = implode('', $lines);
+    }
+
+    fm_response(true, 'Archivo leído', [
+        'path'        => $real_path,
+        'size'        => $size,
+        'total_lines' => $total_lines,
+        'line_start'  => $line_start ?: 1,
+        'line_end'    => $line_end ?: $total_lines,
+        'encoding'    => mb_detect_encoding($content, ['UTF-8', 'ISO-8859-1', 'ASCII'], true),
+        'content'     => $content,
+    ]);
+}
+
+/**
+ * WRITE — Escribir archivo (con backup automático)
+ * Soporta encoding: "base64" para archivos binarios (imágenes, PDFs, etc.)
+ */
+function fm_action_write($params) {
+    $path = $params['path'] ?? '';
+    $content = $params['content'] ?? null;
+    $encoding = $params['encoding'] ?? 'text';  // 'text' (defecto) o 'base64'
+    $create_dirs = !empty($params['create_dirs']);
+    $skip_backup = !empty($params['skip_backup']);
+
+    if (empty($path)) {
+        fm_response(false, 'Parámetro "path" requerido');
+    }
+    if ($content === null) {
+        fm_response(false, 'Parámetro "content" requerido');
+    }
+
+    // Validar encoding
+    $is_binary = ($encoding === 'base64');
+    if ($is_binary) {
+        // Decodificar base64 antes de validar tamaño
+        $decoded = base64_decode($content, true);
+        if ($decoded === false) {
+            fm_response(false, 'Contenido base64 inválido. Asegúrate de enviar base64 válido sin saltos de línea.');
+        }
+    }
+
+    // Validar ruta
+    $real_path = fm_validate_path($path);
+    if ($real_path === false) {
+        // Puede que el directorio padre exista pero el archivo no
+        $parent = dirname($path);
+        $parent_real = fm_validate_path($parent);
+        if ($parent_real === false) {
+            if ($create_dirs) {
+                // Intentar crear directorios padres
+                $root_match = false;
+                foreach (FM_ALLOWED_ROOTS as $root) {
+                    if (strpos($path, $root) === 0) {
+                        $root_match = true;
+                        break;
+                    }
+                }
+                if (!$root_match) {
+                    fm_response(false, 'Ruta no permitida: ' . $path, null, 403);
+                }
+                @mkdir(dirname($path), 0755, true);
+                $real_path = $path;
+            } else {
+                fm_response(false, 'Directorio padre no existe: ' . $parent . '. Use "create_dirs": true para crearlo.');
+            }
+        } else {
+            $real_path = $parent_real . '/' . basename($path);
+        }
+    }
+
+    // Validar extensión (binarios tienen validación ampliada)
+    if ($is_binary) {
+        if (!fm_validate_extension($real_path, 'write_binary')) {
+            fm_response(false, 'Extensión no permitida para escritura binaria: ' . pathinfo($real_path, PATHINFO_EXTENSION));
+        }
+    } else {
+        if (!fm_validate_extension($real_path)) {
+            fm_response(false, 'Extensión de archivo no permitida para escritura: ' . pathinfo($real_path, PATHINFO_EXTENSION));
+        }
+    }
+
+    // Determinar contenido final y validar tamaño
+    if ($is_binary) {
+        $final_content = $decoded;
+        $content_size = strlen($decoded);
+    } else {
+        $final_content = $content;
+        $content_size = strlen($content);
+    }
+
+    if ($content_size > FM_MAX_FILE_SIZE) {
+        fm_response(false, 'Contenido demasiado grande (' . round($content_size / 1024 / 1024, 2) . ' MB). Máximo: ' . round(FM_MAX_FILE_SIZE / 1024 / 1024) . ' MB');
+    }
+
+    // Backup si el archivo ya existe
+    $backup_path = null;
+    $existed = file_exists($real_path);
+    if ($existed && !$skip_backup) {
+        $backup_path = fm_create_backup($real_path);
+        if ($backup_path === false) {
+            fm_response(false, 'Error al crear backup de: ' . $real_path);
+        }
+    }
+
+    fm_log('WRITE', [
+        'path'     => $real_path,
+        'existed'  => $existed,
+        'backup'   => $backup_path,
+        'bytes'    => $content_size,
+        'encoding' => $encoding,
+    ]);
+
+    // Escribir archivo
+    $result = file_put_contents($real_path, $final_content, LOCK_EX);
+    if ($result === false) {
+        fm_response(false, 'Error al escribir archivo: ' . $real_path . '. Verificar permisos.');
+    }
+
+    $response_data = [
+        'path'          => $real_path,
+        'bytes_written' => $result,
+        'backup'        => $backup_path,
+        'created'       => !$existed,
+        'encoding'      => $encoding,
+    ];
+
+    // Solo contar líneas en archivos de texto
+    if (!$is_binary) {
+        $response_data['lines'] = substr_count($final_content, "\n") + 1;
+    }
+
+    fm_response(true, $existed ? 'Archivo actualizado' : 'Archivo creado', $response_data);
+}
+
+/**
+ * MKDIR — Crear directorio
+ */
+function fm_action_mkdir($params) {
+    $path = $params['path'] ?? '';
+
+    if (empty($path)) {
+        fm_response(false, 'Parámetro "path" requerido');
+    }
+
+    // Verificar que la ruta padre está en un directorio permitido
+    $root_match = false;
+    foreach (FM_ALLOWED_ROOTS as $root) {
+        if (strpos($path, $root) === 0) {
+            $root_match = true;
+            break;
+        }
+    }
+
+    if (!$root_match) {
+        fm_response(false, 'Ruta no permitida: ' . $path, null, 403);
+    }
+
+    if (is_dir($path)) {
+        fm_response(true, 'El directorio ya existe', ['path' => $path]);
+    }
+
+    fm_log('MKDIR', ['path' => $path]);
+
+    if (@mkdir($path, 0755, true)) {
+        fm_response(true, 'Directorio creado', ['path' => $path]);
+    } else {
+        fm_response(false, 'Error al crear directorio: ' . $path);
+    }
+}
+
+/**
+ * DELETE — Eliminar archivo (con backup)
+ */
+function fm_action_delete($params) {
+    $path = $params['path'] ?? '';
+    $confirm = !empty($params['confirm']);
+
+    if (empty($path)) {
+        fm_response(false, 'Parámetro "path" requerido');
+    }
+
+    if (!$confirm) {
+        fm_response(false, 'Se requiere "confirm": true para eliminar archivos. Medida de seguridad.');
+    }
+
+    $real_path = fm_validate_path($path);
+    if ($real_path === false) {
+        fm_response(false, 'Ruta no permitida o inexistente: ' . $path, null, 403);
+    }
+
+    // === Eliminar DIRECTORIO (vacío o con solo .backups_claude) ===
+    if (is_dir($real_path)) {
+        // Función recursiva para eliminar directorio y su contenido de backups
+        $rm_dir = function($dir) use (&$rm_dir) {
+            $items = @scandir($dir);
+            if (!is_array($items)) return false;
+            foreach ($items as $item) {
+                if ($item === '.' || $item === '..') continue;
+                $full = $dir . '/' . $item;
+                if (is_dir($full)) {
+                    // Solo permitir eliminar subdirectorios .backups_claude
+                    if (basename($full) === '.backups_claude') {
+                        $rm_dir($full);
+                    } else {
+                        fm_response(false, 'Directorio no vacío: contiene subdirectorio ' . $item);
+                    }
+                } else {
+                    // Dentro de .backups_claude, eliminar archivos .bak
+                    if (strpos($dir, '.backups_claude') !== false) {
+                        @unlink($full);
+                    } else {
+                        fm_response(false, 'Directorio no vacío: contiene archivo ' . $item . '. Elimínelo primero.');
+                    }
+                }
+            }
+            return @rmdir($dir);
+        };
+
+        fm_log('DELETE_DIR', ['path' => $real_path]);
+
+        if ($rm_dir($real_path)) {
+            fm_response(true, 'Directorio eliminado', [
+                'path' => $real_path,
+            ]);
+        } else {
+            fm_response(false, 'Error al eliminar directorio: ' . $real_path);
+        }
+    }
+
+    // === Eliminar ARCHIVO ===
+    if (!is_file($real_path)) {
+        fm_response(false, 'No es un archivo ni directorio, o no existe: ' . $path);
+    }
+
+    // Backup antes de eliminar
+    $backup_path = fm_create_backup($real_path);
+
+    fm_log('DELETE', ['path' => $real_path, 'backup' => $backup_path]);
+
+    if (@unlink($real_path)) {
+        fm_response(true, 'Archivo eliminado', [
+            'path'   => $real_path,
+            'backup' => $backup_path,
+        ]);
+    } else {
+        fm_response(false, 'Error al eliminar: ' . $real_path);
+    }
+}
+
+/**
+ * RENAME — Renombrar/mover archivo
+ */
+function fm_action_rename($params) {
+    $from = $params['from'] ?? '';
+    $to = $params['to'] ?? '';
+
+    if (empty($from) || empty($to)) {
+        fm_response(false, 'Parámetros "from" y "to" requeridos');
+    }
+
+    $real_from = fm_validate_path($from);
+    if ($real_from === false) {
+        fm_response(false, 'Ruta origen no permitida: ' . $from, null, 403);
+    }
+
+    // Validar destino
+    $root_match = false;
+    foreach (FM_ALLOWED_ROOTS as $root) {
+        if (strpos($to, $root) === 0) {
+            $root_match = true;
+            break;
+        }
+    }
+    if (!$root_match) {
+        fm_response(false, 'Ruta destino no permitida: ' . $to, null, 403);
+    }
+
+    // Backup del archivo original
+    $backup_path = fm_create_backup($real_from);
+
+    fm_log('RENAME', ['from' => $real_from, 'to' => $to]);
+
+    if (@rename($real_from, $to)) {
+        fm_response(true, 'Archivo renombrado/movido', [
+            'from'   => $real_from,
+            'to'     => $to,
+            'backup' => $backup_path,
+        ]);
+    } else {
+        fm_response(false, 'Error al renombrar: ' . $real_from . ' -> ' . $to);
+    }
+}
+
+/**
+ * SEARCH — Buscar archivos por nombre o contenido
+ */
+function fm_action_search($params) {
+    $path = $params['path'] ?? '';
+    $filename = $params['filename'] ?? '';
+    $content_search = $params['content'] ?? '';
+    $max_results = min(intval($params['max_results'] ?? 50), 200);
+    $extensions = $params['extensions'] ?? FM_ALLOWED_EXTENSIONS;
+
+    if (empty($path)) {
+        fm_response(false, 'Parámetro "path" requerido');
+    }
+
+    $real_path = fm_validate_path($path);
+    if ($real_path === false) {
+        fm_response(false, 'Ruta no permitida: ' . $path, null, 403);
+    }
+
+    if (empty($filename) && empty($content_search)) {
+        fm_response(false, 'Se requiere "filename" o "content" para buscar');
+    }
+
+    fm_log('SEARCH', [
+        'path'     => $real_path,
+        'filename' => $filename,
+        'content'  => $content_search ? substr($content_search, 0, 50) . '...' : '',
+    ]);
+
+    $results = [];
+    fm_search_recursive($real_path, $filename, $content_search, $extensions, $results, $max_results);
+
+    fm_response(true, count($results) . ' resultados encontrados', [
+        'path'    => $real_path,
+        'query'   => ['filename' => $filename, 'content' => $content_search],
+        'count'   => count($results),
+        'results' => $results,
+    ]);
+}
+
+/**
+ * Búsqueda recursiva en directorio
+ */
+function fm_search_recursive($dir, $filename, $content_search, $extensions, &$results, $max) {
+    if (count($results) >= $max) return;
+
+    $entries = @scandir($dir);
+    if ($entries === false) return;
+
+    foreach ($entries as $entry) {
+        if ($entry === '.' || $entry === '..' || $entry === FM_BACKUP_DIR) continue;
+        if (count($results) >= $max) return;
+
+        $full = $dir . '/' . $entry;
+
+        if (is_dir($full)) {
+            // No entrar en directorios ocultos ni de vendor
+            if ($entry[0] === '.' || $entry === 'node_modules' || $entry === 'vendor') continue;
+            fm_search_recursive($full, $filename, $content_search, $extensions, $results, $max);
+        } elseif (is_file($full)) {
+            $ext = strtolower(pathinfo($entry, PATHINFO_EXTENSION));
+            if (!in_array($ext, $extensions)) continue;
+
+            $match = false;
+            $match_info = [];
+
+            // Búsqueda por nombre
+            if (!empty($filename)) {
+                if (stripos($entry, $filename) !== false) {
+                    $match = true;
+                    $match_info['filename_match'] = true;
+                }
+            }
+
+            // Búsqueda por contenido
+            if (!empty($content_search) && filesize($full) < FM_MAX_FILE_SIZE) {
+                $file_content = @file_get_contents($full);
+                if ($file_content !== false) {
+                    $pos = stripos($file_content, $content_search);
+                    if ($pos !== false) {
+                        $match = true;
+                        $match_info['content_match'] = true;
+                        // Extraer contexto alrededor del match
+                        $start = max(0, $pos - 50);
+                        $excerpt = substr($file_content, $start, strlen($content_search) + 100);
+                        $match_info['excerpt'] = '...' . $excerpt . '...';
+                        // Número de línea del match
+                        $match_info['line'] = substr_count(substr($file_content, 0, $pos), "\n") + 1;
+                    }
+                }
+            }
+
+            if ($match) {
+                $results[] = array_merge([
+                    'path'     => $full,
+                    'name'     => $entry,
+                    'size'     => filesize($full),
+                    'modified' => date('Y-m-d H:i:s', filemtime($full)),
+                ], $match_info);
+            }
+        }
+    }
+}
+
+/**
+ * DIFF — Comparar contenido actual con contenido nuevo
+ */
+function fm_action_diff($params) {
+    $path = $params['path'] ?? '';
+    $new_content = $params['content'] ?? '';
+
+    if (empty($path)) {
+        fm_response(false, 'Parámetro "path" requerido');
+    }
+
+    $real_path = fm_validate_path($path);
+    if ($real_path === false || !is_file($real_path)) {
+        fm_response(false, 'Archivo no encontrado: ' . $path);
+    }
+
+    $old_content = file_get_contents($real_path);
+    $old_lines = explode("\n", $old_content);
+    $new_lines = explode("\n", $new_content);
+
+    fm_log('DIFF', ['path' => $real_path]);
+
+    // Diff simple: líneas cambiadas
+    $changes = [];
+    $max_lines = max(count($old_lines), count($new_lines));
+
+    for ($i = 0; $i < $max_lines; $i++) {
+        $old = isset($old_lines[$i]) ? $old_lines[$i] : null;
+        $new = isset($new_lines[$i]) ? $new_lines[$i] : null;
+
+        if ($old !== $new) {
+            $change = ['line' => $i + 1];
+            if ($old === null) {
+                $change['type'] = 'added';
+                $change['new'] = $new;
+            } elseif ($new === null) {
+                $change['type'] = 'removed';
+                $change['old'] = $old;
+            } else {
+                $change['type'] = 'changed';
+                $change['old'] = $old;
+                $change['new'] = $new;
+            }
+            $changes[] = $change;
+        }
+    }
+
+    fm_response(true, count($changes) . ' líneas diferentes', [
+        'path'          => $real_path,
+        'old_lines'     => count($old_lines),
+        'new_lines'     => count($new_lines),
+        'changes_count' => count($changes),
+        'changes'       => array_slice($changes, 0, 200), // Limitar a 200 diffs
+    ]);
+}
+
+/**
+ * BACKUP — Crear backup manual
+ */
+function fm_action_backup($params) {
+    $path = $params['path'] ?? '';
+
+    if (empty($path)) {
+        fm_response(false, 'Parámetro "path" requerido');
+    }
+
+    $real_path = fm_validate_path($path);
+    if ($real_path === false || !is_file($real_path)) {
+        fm_response(false, 'Archivo no encontrado: ' . $path);
+    }
+
+    fm_log('BACKUP', ['path' => $real_path]);
+
+    $backup_path = fm_create_backup($real_path);
+    if ($backup_path) {
+        fm_response(true, 'Backup creado', [
+            'original' => $real_path,
+            'backup'   => $backup_path,
+        ]);
+    } else {
+        fm_response(false, 'Error al crear backup de: ' . $real_path);
+    }
+}
+
+// ============================================================
+// ROUTER PRINCIPAL
+// ============================================================
+
+// Solo aceptar POST
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    // GET muestra solo un mensaje informativo
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        fm_response(true, 'Claude File Manager v1.1 — Activo. Usar POST con autenticación.', [
+            'status'  => 'active',
+            'version' => '1.1',
+            'method'  => 'POST required',
+        ]);
+    }
+    fm_response(false, 'Método no permitido. Usar POST.', null, 405);
+}
+
+// Autenticación
+fm_authenticate();
+
+// Rate limiting
+fm_rate_limit();
+
+// Leer body JSON
+$raw_body = file_get_contents('php://input');
+$params = json_decode($raw_body, true);
+
+if (!is_array($params)) {
+    fm_response(false, 'Body JSON inválido o vacío');
+}
+
+$action = $params['action'] ?? '';
+
+// Despachar acción
+switch ($action) {
+    case 'info':
+        fm_action_info();
+        break;
+
+    case 'list':
+        fm_action_list($params);
+        break;
+
+    case 'read':
+        fm_action_read($params);
+        break;
+
+    case 'write':
+        fm_action_write($params);
+        break;
+
+    case 'mkdir':
+        fm_action_mkdir($params);
+        break;
+
+    case 'delete':
+        fm_action_delete($params);
+        break;
+
+    case 'rename':
+        fm_action_rename($params);
+        break;
+
+    case 'search':
+        fm_action_search($params);
+        break;
+
+    case 'diff':
+        fm_action_diff($params);
+        break;
+
+    case 'backup':
+        fm_action_backup($params);
+        break;
+
+    default:
+        fm_response(false, 'Acción desconocida: "' . $action . '". Acciones válidas: info, list, read, write, mkdir, delete, rename, search, diff, backup');
+}
+

@@ -1,0 +1,232 @@
+/* ============================================================
+   COURSEBOXES — Estilos fichas de cursos en categorias Y busqueda
+   Ciberaula · Moodle 4.5
+   Version: 1.2 (05/03/2026) — Anadida pagina de resultados de busqueda
+   ============================================================ */
+
+/* === OCULTAR H1 DUPLICADO DE MOODLE EN CATEGORIAS === */
+#page-course-index-category .page-header-headings {
+  display: none !important;
+}
+
+/* MACRO-SELECTOR: aplica a categorias Y a resultados de busqueda */
+#page-course-index-category .coursebox,
+#page-course-search .coursebox {
+  background: #f8fafb;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 20px 24px;
+  margin-bottom: 16px;
+  transition: all 0.3s ease;
+}
+#page-course-index-category .coursebox:hover,
+#page-course-search .coursebox:hover {
+  background: #eef3f8;
+  border-color: #E07A5F;
+  box-shadow: 0 4px 16px rgba(27,42,74,0.10);
+  transform: translateY(-2px);
+}
+#page-course-index-category .coursebox .coursename,
+#page-course-search .coursebox .coursename {
+  font-family: "Outfit", sans-serif !important;
+  font-size: 22px !important;
+  font-weight: 700 !important;
+  color: #1B2A4A !important;
+  margin-bottom: 12px !important;
+  line-height: 1.3 !important;
+}
+#page-course-index-category .coursebox .coursename a,
+#page-course-search .coursebox .coursename a {
+  color: #1B2A4A !important;
+  text-decoration: none !important;
+}
+#page-course-index-category .coursebox .coursename a:hover,
+#page-course-search .coursebox .coursename a:hover {
+  color: #E07A5F !important;
+}
+#page-course-index-category .coursebox .objetivos h2,
+#page-course-search .coursebox .objetivos h2 {
+  font-family: "Outfit", sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1.5px !important;
+  color: #ffffff !important;
+  background: #E07A5F !important;
+  display: inline-block !important;
+  padding: 4px 14px !important;
+  border-radius: 6px !important;
+  margin-bottom: 10px !important;
+  margin-top: 0 !important;
+}
+@media (max-width: 768px) {
+  #page-course-index-category .coursebox,
+  #page-course-search .coursebox { padding: 14px; border-radius: 10px; margin-bottom: 12px; }
+  #page-course-index-category .coursebox:hover,
+  #page-course-search .coursebox:hover { transform: none; }
+  #page-course-index-category .coursebox .coursename,
+  #page-course-search .coursebox .coursename { font-size: 17px !important; margin-bottom: 8px !important; }
+  #page-course-index-category .coursebox .summary .video,
+  #page-course-index-category .coursebox .content .video,
+  #page-course-index-category .coursebox .summary .objetivos,
+  #page-course-index-category .coursebox .content .objetivos,
+  #page-course-index-category .coursebox .summary .curso-modalidad,
+  #page-course-index-category .coursebox .content .curso-modalidad,
+  #page-course-search .coursebox .summary .video,
+  #page-course-search .coursebox .content .video,
+  #page-course-search .coursebox .summary .objetivos,
+  #page-course-search .coursebox .content .objetivos,
+  #page-course-search .coursebox .summary .curso-modalidad,
+  #page-course-search .coursebox .content .curso-modalidad { float: none !important; width: 100% !important; clear: both !important; }
+  #page-course-index-category .coursebox .video img,
+  #page-course-search .coursebox .video img { max-width: 65% !important; height: auto !important; margin: 0 auto !important; display: block !important; }
+  #page-course-index-category .coursebox .video iframe,
+  #page-course-search .coursebox .video iframe { width: 100% !important; height: auto !important; aspect-ratio: 16/9; max-width: 100% !important; }
+  #page-course-index-category .coursebox .curso-modalidad,
+  #page-course-search .coursebox .curso-modalidad { font-size: 12px !important; }
+  #page-course-index-category .coursebox .objetivos h2,
+  #page-course-search .coursebox .objetivos h2 { font-size: 11px !important; padding: 3px 10px !important; }
+  #page-course-index-category .coursebox .objetivos p,
+  #page-course-index-category .coursebox .objetivos li,
+  #page-course-search .coursebox .objetivos p,
+  #page-course-search .coursebox .objetivos li { font-size: 13px !important; line-height: 1.55 !important; }
+}
+@media (max-width: 480px) {
+  #page-course-index-category .coursebox,
+  #page-course-search .coursebox { padding: 10px; margin-bottom: 10px; }
+  #page-course-index-category .coursebox .coursename,
+  #page-course-search .coursebox .coursename { font-size: 15px !important; }
+  #page-course-index-category .coursebox .video img,
+  #page-course-search .coursebox .video img { max-width: 75% !important; }
+  #page-course-index-category .coursebox .objetivos p,
+  #page-course-index-category .coursebox .objetivos li,
+  #page-course-search .coursebox .objetivos p,
+  #page-course-search .coursebox .objetivos li { font-size: 12.5px !important; }
+}
+
+
+/* ============================================================
+   BÚSQUEDA: normalizar sumarios al mismo aspecto que en categorías
+   Ciberaula · v1.4 · 05/03/2026
+   Cubre las 4 variantes de estructura HTML de los summaries
+   ============================================================ */
+
+/* --- Contenedor general del summary --- */
+#page-course-search .coursebox .no-overflow,
+#page-course-search .coursebox .summary {
+  overflow: hidden !important;
+}
+
+/* --- Columna izquierda: objetivos (con o sin clase .objetivos) --- */
+#page-course-search .coursebox .Apartado-Videos > div[style*="float: left"],
+#page-course-search .coursebox .Apartado-Videos > div[style*="float:left"],
+#page-course-search .coursebox .objetivos {
+  float: left !important;
+  width: 59% !important;
+  box-sizing: border-box !important;
+  padding-right: 12px !important;
+}
+
+/* --- Columna derecha: imagen/video (con o sin clase .video) --- */
+#page-course-search .coursebox .Apartado-Videos > div[style*="float: right"],
+#page-course-search .coursebox .Apartado-Videos > div[style*="float:right"],
+#page-course-search .coursebox .video {
+  float: right !important;
+  width: 39% !important;
+  box-sizing: border-box !important;
+}
+
+/* --- Imagen del curso --- */
+#page-course-search .coursebox .video img,
+#page-course-search .coursebox .Apartado-Videos > div[style*="float: right"] img,
+#page-course-search .coursebox .Apartado-Videos > div[style*="float:right"] img {
+  width: 100% !important;
+  height: auto !important;
+  border-radius: 12px !important;
+  display: block !important;
+}
+
+/* --- Iframe YouTube --- */
+#page-course-search .coursebox .Apartado-Videos iframe {
+  width: 100% !important;
+  height: auto !important;
+  aspect-ratio: 16/9 !important;
+  display: block !important;
+  border-radius: 8px !important;
+}
+
+/* --- Badge del h2 de objetivos (todas las variantes) --- */
+#page-course-search .coursebox .objetivos h2,
+#page-course-search .coursebox .Apartado-Videos > div[style*="float: left"] h2,
+#page-course-search .coursebox .Apartado-Videos > div[style*="float:left"] h2,
+#page-course-search .coursebox .summary h2 {
+  font-family: "Outfit", Arial, sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+  color: #ffffff !important;
+  background: #E07A5F !important;
+  display: inline-block !important;
+  padding: 5px 12px !important;
+  border-radius: 5px !important;
+  margin: 0 0 10px 0 !important;
+  line-height: 1.3 !important;
+}
+
+/* --- Texto del objetivo --- */
+#page-course-search .coursebox .objetivos p,
+#page-course-search .coursebox .objetivos li,
+#page-course-search .coursebox .objetivos span,
+#page-course-search .coursebox .Apartado-Videos > div[style*="float: left"] p,
+#page-course-search .coursebox .Apartado-Videos > div[style*="float: left"] li,
+#page-course-search .coursebox .Apartado-Videos > div[style*="float:left"] p,
+#page-course-search .coursebox .Apartado-Videos > div[style*="float:left"] li {
+  font-family: "Plus Jakarta Sans", Verdana, sans-serif !important;
+  font-size: 13px !important;
+  line-height: 1.6 !important;
+  color: #1a1a2e !important;
+  text-align: justify !important;
+}
+
+/* --- Barra de horas lectivas (.curso-modalidad) --- */
+#page-course-search .coursebox .curso-modalidad,
+#page-course-search .coursebox .Apartado-Videos > div[style*="float: right"] p,
+#page-course-search .coursebox .Apartado-Videos > div[style*="float:right"] p {
+  background: #1B2A4A !important;
+  color: #ffffff !important;
+  font-family: "Outfit", Arial, sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  text-align: center !important;
+  padding: 8px 10px !important;
+  border-radius: 0 0 8px 8px !important;
+  margin: 6px 0 0 0 !important;
+  border: none !important;
+  letter-spacing: 0.3px !important;
+  line-height: 1.4 !important;
+}
+
+/* --- Cursos tipo D: sin estructura .Apartado-Videos, solo h2 + texto --- */
+#page-course-search .coursebox .summary > h2:first-child,
+#page-course-search .coursebox .no-overflow > h2:first-child {
+  font-family: "Outfit", Arial, sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  color: #ffffff !important;
+  background: #E07A5F !important;
+  display: inline-block !important;
+  padding: 5px 12px !important;
+  border-radius: 5px !important;
+  margin: 0 0 10px 0 !important;
+  letter-spacing: 1px !important;
+  line-height: 1.3 !important;
+}
+
+/* --- Clearfix para los floats --- */
+#page-course-search .coursebox .Apartado-Videos::after {
+  content: "";
+  display: table;
+  clear: both;
+}
