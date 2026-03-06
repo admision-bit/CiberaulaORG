@@ -35,6 +35,23 @@ $stmt->close();
 if (!$curso) { header('Location: ' . BASE_URL); exit; }
 
 $nombre = plain_text($curso['fullname']);
+
+// Eliminar prefijo redundante si el fullname ya incluye "Curso bonificado de"
+// para evitar títulos duplicados como "Curso bonificado de Curso bonificado de X"
+$prefijos = [
+    'Curso bonificado de ',
+    'Curso Bonificado de ',
+    'Curso online de ',
+    'Curso Online de ',
+];
+$nombreCorto = $nombre;
+foreach ($prefijos as $p) {
+    if (stripos($nombreCorto, $p) === 0) {
+        $nombreCorto = substr($nombreCorto, strlen($p));
+        break;
+    }
+}
+
 $catNombre = clean_cat_name($curso['cat_name']);
 $catNombreCorto = short_cat_name($curso['cat_name']);
 $data = extract_course_data($curso['summary']);
@@ -58,21 +75,25 @@ $shareUrl = $cursoUrl;
 // URL canónica de la categoría (amigable)
 $catUrl = cat_url($curso['category']);
 
-$pageTitle = 'Curso bonificado de ' . $nombre;
-$pageDesc = $data['objetivo'] ? mb_substr(strip_tags($data['objetivo']), 0, 155) : 'Curso bonificado de ' . $nombre . '. 100% bonificable por FUNDAE.';
+// Título de página: usar el fullname completo si ya tiene prefijo, o añadirlo si no lo tiene
+$pageTitle = (stripos($nombre, 'Curso bonificado') === 0 || stripos($nombre, 'Curso online') === 0)
+    ? $nombre
+    : 'Curso bonificado de ' . $nombre;
+
+$pageDesc = $data['objetivo'] ? mb_substr(strip_tags($data['objetivo']), 0, 155) : 'Curso bonificado de ' . $nombreCorto . '. 100% bonificable por FUNDAE.';
 $pageImage = $imagen;
 
-// FAQ de curso
-$faqs = get_faq_curso($nombre, $data['horas']);
+// FAQ de curso — usar nombreCorto para las preguntas (sin prefijo)
+$faqs = get_faq_curso($nombreCorto, $data['horas']);
 
 // Schema JSON-LD
 $pageSchemas = [
-    schema_course($nombre, $data['objetivo'] ?: $pageDesc, $data['horas'], $cursoUrl, $imagen),
+    schema_course($pageTitle, $data['objetivo'] ?: $pageDesc, $data['horas'], $cursoUrl, $imagen),
     schema_faqpage($faqs),
     schema_breadcrumbs([
         ['name' => 'Inicio', 'url' => 'https://www.ciberaula.org' . BASE_URL],
         ['name' => $catNombre, 'url' => $catUrl],
-        ['name' => $nombre, 'url' => $cursoUrl],
+        ['name' => $pageTitle, 'url' => $cursoUrl],
     ]),
 ];
 
@@ -87,7 +108,7 @@ require __DIR__ . '/header.php';
 
 <div class="curso-header">
   <span class="curso-badge">100% bonificable por FUNDAE</span>
-  <h1 class="curso-title"><?= htmlspecialchars($nombre) ?></h1>
+  <h1 class="curso-title"><?= htmlspecialchars($pageTitle) ?></h1>
 </div>
 
 <?php if ($data['horas']): ?>
@@ -99,7 +120,7 @@ require __DIR__ . '/header.php';
 <?php endif; ?>
 
 <div class="curso-img-wrap">
-  <img class="curso-img" src="<?= htmlspecialchars($imagen) ?>" alt="<?= htmlspecialchars($nombre) ?>" width="800" height="400">
+  <img class="curso-img" src="<?= htmlspecialchars($imagen) ?>" alt="<?= htmlspecialchars($pageTitle) ?>" width="800" height="400">
 </div>
 
 <!-- Botones de compartir -->
@@ -111,7 +132,7 @@ require __DIR__ . '/header.php';
   <a href="https://www.linkedin.com/sharing/share-offsite/?url=<?= urlencode($cursoUrl) ?>" target="_blank" rel="noopener" class="share-btn share-li" title="LinkedIn">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
   </a>
-  <a href="mailto:?subject=<?= rawurlencode('Curso: ' . $nombre . ' - Ciberaula') ?>&body=<?= rawurlencode('Te comparto este curso bonificable por FUNDAE:' . "\n\n" . $nombre . "\n" . $cursoUrl) ?>" class="share-btn share-email" title="Email">
+  <a href="mailto:?subject=<?= rawurlencode('Curso: ' . $pageTitle . ' - Ciberaula') ?>&body=<?= rawurlencode('Te comparto este curso bonificable por FUNDAE:' . "\n\n" . $pageTitle . "\n" . $cursoUrl) ?>" class="share-btn share-email" title="Email">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
   </a>
   <button class="share-btn share-copy" title="Copiar enlace" onclick="navigator.clipboard.writeText('<?= $cursoUrl ?>');this.title='Copiado!'">

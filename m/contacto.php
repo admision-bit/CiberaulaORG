@@ -1,7 +1,10 @@
 <?php
 /**
- * Formulario de Contacto v3 - Catalogo Movil Ciberaula
- * v3: Email HTML de confirmacion al usuario con logo y pie profesional
+ * Formulario de Contacto v4 - Catálogo Móvil Ciberaula
+ * v4: + campo empresa (obligatorio)
+ *     + campo acepta_rgpd (obligatorio)
+ *     + tracking origen (página exacta, tipo desktop/móvil)
+ *     + email admisión mejorado con tabla de datos
  */
 session_start();
 require __DIR__ . '/config.php';
@@ -85,161 +88,89 @@ function enviarEmail($para,$asunto,$cuerpo,$from_email,$from_name,$reply_to,$ct=
     return ['ok'=>$ok,'method'=>'mail','log'=>''];
 }
 
-// Generar email HTML de confirmacion para el usuario
+// Email HTML de confirmación para el usuario
 function generarEmailUsuario($nombre, $mensaje, $catalogo_url) {
-    $nombre_html = htmlspecialchars($nombre, ENT_QUOTES, 'UTF-8');
+    $nombre_html  = htmlspecialchars($nombre, ENT_QUOTES, 'UTF-8');
     $mensaje_html = nl2br(htmlspecialchars($mensaje, ENT_QUOTES, 'UTF-8'));
 
     return '<!DOCTYPE html>
 <html lang="es">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
 <body style="margin:0;padding:0;background-color:#f0f2f5;font-family:Arial,Helvetica,sans-serif;">
-
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f0f2f5;padding:24px 0;">
 <tr><td align="center">
 <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="background-color:#ffffff;border-radius:12px;overflow:hidden;max-width:600px;width:100%;box-shadow:0 2px 12px rgba(0,0,0,0.08);">
-
-<!-- CABECERA CON LOGO -->
-<tr>
-<td style="background:linear-gradient(135deg,#1B2A4A 0%,#2d4a7a 100%);padding:32px 40px;text-align:center;">
+<tr><td style="background:linear-gradient(135deg,#1B2A4A 0%,#2d4a7a 100%);padding:32px 40px;text-align:center;">
 <img src="https://www.ciberaula.com/img/logo.png" alt="Ciberaula" width="200" style="display:block;margin:0 auto;max-width:200px;height:auto;">
-<p style="margin:12px 0 0;font-size:13px;color:rgba(255,255,255,0.7);letter-spacing:0.5px;">Formaci&oacute;n online para empresas desde 1996</p>
-</td>
-</tr>
-
-<!-- ICONO CHECK -->
-<tr>
-<td style="padding:28px 40px 0;text-align:center;">
+<p style="margin:12px 0 0;font-size:13px;color:rgba(255,255,255,0.7);letter-spacing:0.5px;">Formaci&oacute;n online para empresas desde 1997</p>
+</td></tr>
+<tr><td style="padding:28px 40px 0;text-align:center;">
 <div style="display:inline-block;width:60px;height:60px;border-radius:50%;background-color:#e8f5e9;line-height:60px;text-align:center;">
-<span style="color:#2e7d32;font-size:30px;font-weight:bold;">&#10003;</span>
-</div>
-</td>
-</tr>
-
-<!-- TITULO -->
-<tr>
-<td style="padding:16px 40px 0;text-align:center;">
-<h1 style="margin:0;font-size:22px;color:#1B2A4A;font-weight:700;">&iexcl;Mensaje recibido!</h1>
-</td>
-</tr>
-
-<!-- SALUDO Y TEXTO -->
-<tr>
-<td style="padding:16px 40px 0;font-size:15px;line-height:1.6;color:#4a5568;">
+<span style="color:#2e7d32;font-size:30px;font-weight:bold;">&#10003;</span></div></td></tr>
+<tr><td style="padding:16px 40px 0;text-align:center;">
+<h1 style="margin:0;font-size:22px;color:#1B2A4A;font-weight:700;">&iexcl;Mensaje recibido!</h1></td></tr>
+<tr><td style="padding:16px 40px 0;font-size:15px;line-height:1.6;color:#4a5568;">
 <p style="margin:0 0 12px;">Hola <strong>' . $nombre_html . '</strong>,</p>
 <p style="margin:0 0 12px;">Hemos recibido su consulta correctamente. Nuestro equipo la revisar&aacute; y le responderemos lo antes posible, normalmente en <strong>menos de 3 horas</strong> en d&iacute;as laborales.</p>
-</td>
-</tr>
-
-<!-- RESUMEN DEL MENSAJE -->
-<tr>
-<td style="padding:12px 40px 0;">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-<tr>
+</td></tr>
+<tr><td style="padding:12px 40px 0;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
 <td style="background-color:#faf6f0;border-left:4px solid #E07A5F;padding:16px 20px;border-radius:0 8px 8px 0;">
 <p style="margin:0 0 6px;font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.8px;">Su consulta</p>
 <p style="margin:0;font-size:14px;line-height:1.6;color:#1a202c;">' . $mensaje_html . '</p>
-</td>
-</tr>
-</table>
-</td>
-</tr>
-
-<!-- CONTACTO DIRECTO -->
-<tr>
-<td style="padding:24px 40px 0;">
+</td></tr></table></td></tr>
+<tr><td style="padding:24px 40px 0;">
 <p style="margin:0 0 12px;font-size:14px;font-weight:600;color:#1B2A4A;">&iquest;Necesita contactarnos antes?</p>
 <table role="presentation" cellpadding="0" cellspacing="0">
-<tr>
-<td style="padding:4px 0;font-size:14px;color:#4a5568;">
-&#9742;&nbsp; <a href="tel:+34915303387" style="color:#4a5568;text-decoration:none;">915 303 387</a>
-</td>
-</tr>
-<tr>
-<td style="padding:4px 0;font-size:14px;color:#4a5568;">
-&#128172;&nbsp; <a href="https://wa.me/34620505230" style="color:#4a5568;text-decoration:none;">WhatsApp: 620 505 230</a>
-</td>
-</tr>
-<tr>
-<td style="padding:4px 0;font-size:14px;color:#4a5568;">
-&#9993;&nbsp; <a href="mailto:admision@ciberaula.com" style="color:#2c5282;text-decoration:none;">admision@ciberaula.com</a>
-</td>
-</tr>
-</table>
-</td>
-</tr>
-
-<!-- SEPARADOR -->
-<tr>
-<td style="padding:24px 40px 0;">
-<hr style="border:none;border-top:1px solid #e8e8e8;margin:0;">
-</td>
-</tr>
-
-<!-- BOTON CATALOGO -->
-<tr>
-<td style="padding:24px 40px 0;text-align:center;">
+<tr><td style="padding:4px 0;font-size:14px;color:#4a5568;">&#9742;&nbsp; <a href="tel:+34915303387" style="color:#4a5568;text-decoration:none;">915 303 387</a></td></tr>
+<tr><td style="padding:4px 0;font-size:14px;color:#4a5568;">&#128172;&nbsp; <a href="https://wa.me/34620505230" style="color:#4a5568;text-decoration:none;">WhatsApp: 620 505 230</a></td></tr>
+<tr><td style="padding:4px 0;font-size:14px;color:#4a5568;">&#9993;&nbsp; <a href="mailto:admision@ciberaula.com" style="color:#2c5282;text-decoration:none;">admision@ciberaula.com</a></td></tr>
+</table></td></tr>
+<tr><td style="padding:24px 40px 0;"><hr style="border:none;border-top:1px solid #e8e8e8;margin:0;"></td></tr>
+<tr><td style="padding:24px 40px 0;text-align:center;">
 <p style="margin:0 0 14px;font-size:14px;color:#4a5568;">Mientras tanto, explore nuestro cat&aacute;logo de cursos bonificados:</p>
 <a href="' . htmlspecialchars($catalogo_url) . '" style="display:inline-block;padding:14px 32px;background:linear-gradient(135deg,#E07A5F,#d4694f);color:#ffffff;font-size:15px;font-weight:700;text-decoration:none;border-radius:8px;">Ver cat&aacute;logo de cursos</a>
-</td>
-</tr>
-
-<!-- PIE -->
-<tr>
-<td style="padding:28px 40px;text-align:center;">
+</td></tr>
+<tr><td style="padding:28px 40px;text-align:center;">
 <p style="margin:0 0 4px;font-size:13px;color:#1B2A4A;font-weight:700;">Ciberaula de Formaci&oacute;n Online S.L.</p>
 <p style="margin:0 0 4px;font-size:12px;color:#a0aec0;">P&ordm; de la Castellana 91, 4&ordf; planta &middot; 28046 Madrid</p>
 <p style="margin:0 0 4px;font-size:12px;color:#a0aec0;">Entidad autorizada FUNDAE</p>
-<p style="margin:10px 0 0;">
-<a href="https://www.ciberaula.com" style="display:inline-block;padding:8px 20px;background-color:#1B2A4A;color:#ffffff;font-size:12px;font-weight:600;text-decoration:none;border-radius:4px;">ciberaula.com</a>
-</p>
-</td>
-</tr>
-
-</table>
+<p style="margin:10px 0 0;"><a href="https://www.ciberaula.com" style="display:inline-block;padding:8px 20px;background-color:#1B2A4A;color:#ffffff;font-size:12px;font-weight:600;text-decoration:none;border-radius:4px;">ciberaula.com</a></p>
 </td></tr>
-
-<!-- NOTA LEGAL EXTERIOR -->
-<tr>
-<td align="center" style="padding:16px 20px;">
+</table></td></tr>
+<tr><td align="center" style="padding:16px 20px;">
 <p style="margin:0;font-size:11px;color:#a0aec0;line-height:1.5;max-width:500px;">
 Este correo es una confirmaci&oacute;n autom&aacute;tica de su consulta enviada a trav&eacute;s de Ciberaula. Si no ha realizado esta solicitud, puede ignorar este mensaje.
-</p>
-</td>
-</tr>
-
+</p></td></tr>
 </table>
-</body>
-</html>';
+</body></html>';
 }
 
 $opciones_fuente = [
-    ''                => 'Seleccione...',
-    'google'          => 'Google (b&uacute;squeda)',
-    'chatgpt'         => 'ChatGPT',
-    'perplexity'      => 'Perplexity',
-    'gemini'          => 'Gemini',
-    'copilot'         => 'Copilot (Microsoft)',
-    'linkedin'        => 'LinkedIn',
-    'cliente'         => 'Ya soy cliente',
-    'recomendacion'   => 'Recomendaci&oacute;n de un conocido',
-    'evento'          => 'Evento o feria profesional',
-    'otro'            => 'Otro',
+    ''              => 'Seleccione...',
+    'google'        => 'Google (b&uacute;squeda)',
+    'chatgpt'       => 'ChatGPT',
+    'perplexity'    => 'Perplexity',
+    'gemini'        => 'Gemini',
+    'copilot'       => 'Copilot (Microsoft)',
+    'linkedin'      => 'LinkedIn',
+    'cliente'       => 'Ya soy cliente',
+    'recomendacion' => 'Recomendaci&oacute;n de un conocido',
+    'evento'        => 'Evento o feria profesional',
+    'otro'          => 'Otro',
 ];
-
-// Para validacion server-side (sin entidades HTML)
 $opciones_fuente_plain = [
-    ''                => 'Seleccione...',
-    'google'          => 'Google (búsqueda)',
-    'chatgpt'         => 'ChatGPT',
-    'perplexity'      => 'Perplexity',
-    'gemini'          => 'Gemini',
-    'copilot'         => 'Copilot (Microsoft)',
-    'linkedin'        => 'LinkedIn',
-    'cliente'         => 'Ya soy cliente',
-    'recomendacion'   => 'Recomendación de un conocido',
-    'evento'          => 'Evento o feria profesional',
-    'otro'            => 'Otro',
+    ''              => 'Seleccione...',
+    'google'        => 'Google (búsqueda)',
+    'chatgpt'       => 'ChatGPT',
+    'perplexity'    => 'Perplexity',
+    'gemini'        => 'Gemini',
+    'copilot'       => 'Copilot (Microsoft)',
+    'linkedin'      => 'LinkedIn',
+    'cliente'       => 'Ya soy cliente',
+    'recomendacion' => 'Recomendación de un conocido',
+    'evento'        => 'Evento o feria profesional',
+    'otro'          => 'Otro',
 ];
 
 if(empty($_SESSION['csrf_token_m'])) $_SESSION['csrf_token_m']=bin2hex(random_bytes(32));
@@ -249,7 +180,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 }
 
 $errores=[]; $exito=false;
-$nombre=$email=$telefono=$mensaje=$fuente='';
+$nombre=$email=$telefono=$empresa=$mensaje=$fuente='';
 
 if ($_SERVER['REQUEST_METHOD']==='POST') {
     if (!empty($_POST['website'])) { $exito=true; }
@@ -258,60 +189,72 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
         if (!hash_equals($_SESSION['csrf_token_m'],$t)) $errores[]='Sesión expirada. Recargue la página.';
         if (empty($errores) && (time()-($_SESSION['form_time_m']??time()))<3) $errores[]='Rellene el formulario con calma.';
 
-        $nombre   = trim($_POST['nombre'] ?? '');
-        $email    = trim(filter_var($_POST['email']??'', FILTER_SANITIZE_EMAIL));
-        $telefono = trim(preg_replace('/[^0-9+\s\-]/','',$_POST['telefono']??''));
-        $mensaje  = trim($_POST['mensaje'] ?? '');
-        $fuente   = trim($_POST['fuente'] ?? '');
+        $nombre       = trim($_POST['nombre'] ?? '');
+        $email        = trim(filter_var($_POST['email']??'', FILTER_SANITIZE_EMAIL));
+        $telefono     = trim(preg_replace('/[^0-9+\s\-]/','',$_POST['telefono']??''));
+        $empresa      = trim($_POST['empresa'] ?? '');
+        $mensaje      = trim($_POST['mensaje'] ?? '');
+        $fuente       = trim($_POST['fuente'] ?? '');
+        $acepta_rgpd  = !empty($_POST['acepta_rgpd']);
         $pagina_origen = trim($_POST['pagina_origen'] ?? '');
+        $tipo_pagina   = trim($_POST['tipo_pagina'] ?? 'móvil');
 
         if (empty($errores)) {
-            if (empty($nombre)||mb_strlen($nombre)<3) $errores[]='Nombre obligatorio (mín. 3 caracteres).';
+            if (empty($nombre)||mb_strlen($nombre)<3)      $errores[]='Nombre obligatorio (mín. 3 caracteres).';
             if (empty($email)||!filter_var($email,FILTER_VALIDATE_EMAIL)) $errores[]='Email válido obligatorio.';
             $tn=preg_replace('/[^0-9]/','',$telefono);
-            if (empty($telefono)||strlen($tn)<9) $errores[]='Teléfono obligatorio (mín. 9 dígitos).';
-            if (empty($mensaje)||mb_strlen($mensaje)<10) $errores[]='Mensaje obligatorio (mín. 10 caracteres).';
+            if (empty($telefono)||strlen($tn)<9)           $errores[]='Teléfono obligatorio (mín. 9 dígitos).';
+            if (empty($empresa)||mb_strlen($empresa)<2)    $errores[]='Nombre de empresa obligatorio.';
+            if (empty($mensaje)||mb_strlen($mensaje)<10)   $errores[]='Mensaje obligatorio (mín. 10 caracteres).';
             if (empty($fuente)||!array_key_exists($fuente,$opciones_fuente_plain)) $errores[]='Indique cómo nos ha conocido.';
+            if (!$acepta_rgpd)                             $errores[]='Debe aceptar la política de datos.';
             if (preg_match_all('/https?:\/\//i', $mensaje) > 2) $errores[]='El mensaje contiene demasiados enlaces.';
         }
 
         if (empty($errores)) {
             $fuente_texto = $opciones_fuente_plain[$fuente] ?? $fuente;
 
-            // --- Email texto plano a admision ---
-            $cuerpo ="CONTACTO DESDE CATÁLOGO MÓVIL\n";
-            $cuerpo.="================================\n\n";
-            $cuerpo.="Nombre: $nombre\n";
-            $cuerpo.="Email: $email\n";
-            $cuerpo.="Teléfono: $telefono\n";
-            $cuerpo.="Nos conoció por: $fuente_texto\n";
-            $cuerpo.="Página de origen: " . ($pagina_origen ?: 'Acceso directo') . "\n\n";
-            $cuerpo.="Mensaje:\n--------\n$mensaje\n\n";
-            $cuerpo.="================================\n";
-            $cuerpo.="Enviado: ".date('d/m/Y H:i:s')."\n";
-            $cuerpo.="IP: " . ($_SERVER['REMOTE_ADDR'] ?? 'desconocida') . "\n";
+            // --- Email HTML a admisión ---
+            $cuerpo_admin = '<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"></head><body style="font-family:Arial,sans-serif;background:#f0f2f5;padding:20px 0;">
+<table width="600" cellpadding="0" cellspacing="0" style="background:#fff;border-radius:10px;overflow:hidden;max-width:600px;margin:0 auto;box-shadow:0 2px 10px rgba(0,0,0,0.1);">
+<tr><td style="background:linear-gradient(135deg,#1B2A4A,#2d4a7a);padding:20px 32px;">
+<span style="color:#fff;font-size:18px;font-weight:700;">📩 Nuevo contacto — ciberaula.org</span>
+<br><span style="color:rgba(255,255,255,0.7);font-size:12px;">' . htmlspecialchars($tipo_pagina) . ' · ' . date('d/m/Y H:i') . '</span>
+</td></tr>
+<tr><td style="padding:24px 32px;">
+<p style="margin:0 0 16px;font-size:15px;color:#1B2A4A;font-weight:700;">' . htmlspecialchars($nombre) . ' quiere información:</p>
+<table width="100%" cellpadding="0" cellspacing="0" style="font-size:14px;color:#333;">
+<tr><td style="padding:6px 12px 6px 0;color:#888;width:140px;"><strong>Empresa:</strong></td><td style="padding:6px 0;">' . htmlspecialchars($empresa) . '</td></tr>
+<tr><td style="padding:6px 12px 6px 0;color:#888;"><strong>Email:</strong></td><td><a href="mailto:' . htmlspecialchars($email) . '" style="color:#2c5282;">' . htmlspecialchars($email) . '</a></td></tr>
+<tr><td style="padding:6px 12px 6px 0;color:#888;"><strong>Teléfono:</strong></td><td>' . htmlspecialchars($telefono) . '</td></tr>
+<tr><td style="padding:6px 12px 6px 0;color:#888;"><strong>Nos conoció por:</strong></td><td>' . htmlspecialchars($fuente_texto) . '</td></tr>
+<tr><td style="padding:6px 12px 6px 0;color:#888;"><strong>Página de origen:</strong></td><td><a href="' . htmlspecialchars($pagina_origen) . '" style="color:#2c5282;font-size:12px;">' . htmlspecialchars($pagina_origen ?: 'Acceso directo') . '</a></td></tr>
+<tr><td style="padding:6px 12px 6px 0;color:#888;"><strong>Tipo de página:</strong></td><td><span style="background:' . ($tipo_pagina==='móvil'?'#e3f2fd':'#f3e5f5') . ';padding:2px 8px;border-radius:10px;font-size:12px;">' . htmlspecialchars($tipo_pagina) . '</span></td></tr>
+</table>
+<div style="margin:20px 0;padding:16px;background:#faf6f0;border-left:4px solid #E07A5F;border-radius:0 8px 8px 0;">
+<p style="margin:0 0 6px;font-size:11px;font-weight:700;color:#888;text-transform:uppercase;">Mensaje</p>
+<p style="margin:0;font-size:14px;line-height:1.6;color:#1a202c;">' . nl2br(htmlspecialchars($mensaje)) . '</p>
+</div>
+<p style="margin:0;font-size:12px;color:#aaa;">IP: ' . ($_SERVER['REMOTE_ADDR'] ?? 'desconocida') . ' · Enviado: ' . date('d/m/Y H:i:s') . '</p>
+</td></tr>
+</table>
+</body></html>';
 
-            $r = enviarEmail($email_destino,'Contacto catálogo móvil - '.$fuente_texto,$cuerpo,$email_remite,$nombre_remite,$email);
+            $asunto_admin = '📩 Contacto ciberaula.org — ' . $empresa . ' (' . $fuente_texto . ')';
+            $r = enviarEmail($email_destino, $asunto_admin, $cuerpo_admin, $email_remite, $nombre_remite, $email, 'text/html');
 
             if ($r['ok']) {
                 $exito = true;
-                $_SESSION['csrf_token_m']=bin2hex(random_bytes(32));
-                $_SESSION['form_time_m']=time();
+                $_SESSION['csrf_token_m'] = bin2hex(random_bytes(32));
+                $_SESSION['form_time_m']  = time();
 
-                // --- Email HTML de confirmacion al usuario ---
-                $catalogo_url = 'https://www.ciberaula.com/catalogo/';
+                // Email HTML de confirmación al usuario
+                $catalogo_url = 'https://www.ciberaula.org/m/';
                 $email_html = generarEmailUsuario($nombre, $mensaje, $catalogo_url);
-                enviarEmail(
-                    $email,
-                    'Hemos recibido su consulta - Ciberaula',
-                    $email_html,
-                    $email_remite,
-                    $nombre_remite,
-                    $email_destino,
-                    'text/html'
-                );
+                enviarEmail($email, 'Hemos recibido su consulta - Ciberaula', $email_html,
+                    $email_remite, $nombre_remite, $email_destino, 'text/html');
 
-                $nombre=$email=$telefono=$mensaje=$fuente='';
+                $nombre=$email=$telefono=$empresa=$mensaje=$fuente='';
             } else {
                 $errores[]='Error al enviar. Puede llamarnos al 915 303 387 o escribir a admision@ciberaula.com.';
             }
@@ -319,8 +262,8 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
     }
 }
 
-$pageTitle = 'Contacto';
-$pageDesc = 'Contacta con Ciberaula. Cursos bonificados FUNDAE para empresas. Tel: 915 303 387.';
+$pageTitle    = 'Contacto | Ciberaula';
+$pageDesc     = 'Contacta con Ciberaula. Cursos bonificados FUNDAE para empresas. Tel: 915 303 387.';
 require __DIR__ . '/header.php';
 ?>
 
@@ -353,7 +296,8 @@ require __DIR__ . '/header.php';
 
   <form method="post" action="<?= BASE_URL ?>contacto.php" id="mContactForm" novalidate>
     <input type="hidden" name="csrf_token_m" value="<?= htmlspecialchars($_SESSION['csrf_token_m']) ?>">
-    <input type="hidden" name="pagina_origen" value="<?= htmlspecialchars($_SESSION['form_referer'] ?? '') ?>">
+    <input type="hidden" name="pagina_origen" id="mPaginaOrigen" value="<?= htmlspecialchars($_SESSION['form_referer'] ?? '') ?>">
+    <input type="hidden" name="tipo_pagina" id="mTipoPagina" value="móvil">
     <div style="position:absolute;left:-9999px" aria-hidden="true">
       <input type="text" name="website" tabindex="-1" autocomplete="off">
     </div>
@@ -380,6 +324,13 @@ require __DIR__ . '/header.php';
     </div>
 
     <div class="form-field">
+      <label for="mEmpresa">Nombre de su empresa *</label>
+      <input type="text" id="mEmpresa" name="empresa" required minlength="2" maxlength="150"
+             autocomplete="organization" value="<?= htmlspecialchars($empresa) ?>"
+             placeholder="Ej: Empresa S.L.">
+    </div>
+
+    <div class="form-field">
       <label for="mFuente">¿Cómo nos ha conocido? *</label>
       <select id="mFuente" name="fuente" required>
         <?php foreach ($opciones_fuente as $val => $txt): ?>
@@ -395,11 +346,17 @@ require __DIR__ . '/header.php';
       <div class="form-char-count" id="mMsgCount">0 / 5000</div>
     </div>
 
+    <div class="form-field form-field-check">
+      <label class="check-label">
+        <input type="checkbox" name="acepta_rgpd" id="mRgpd" value="1" required <?= !empty($_POST['acepta_rgpd'])?'checked':'' ?>>
+        <span>He leído la <a href="https://www.ciberaula.com/formulario/politica-datos.html" target="_blank" rel="noopener">política de datos</a> y acepto que Ciberaula trate mis datos para gestionar mi consulta. *</span>
+      </label>
+    </div>
+
     <button type="submit" class="contact-form-btn form-submit-btn" id="mBtnSend">
       Enviar mensaje
     </button>
 
-    <p class="form-legal">Al enviar acepta nuestra <a href="https://www.ciberaula.com/formulario/politica-datos.html" target="_blank" rel="noopener">política de datos</a>. Responsable: Ciberaula de Formación Online S.L.</p>
   </form>
   <?php endif; ?>
 
@@ -407,24 +364,38 @@ require __DIR__ . '/header.php';
 
 <script>
 (function(){
-  var f=document.getElementById('mContactForm');
-  if(!f)return;
-  var msg=document.getElementById('mMsg');
-  var cnt=document.getElementById('mMsgCount');
-  if(msg&&cnt){msg.addEventListener('input',function(){cnt.textContent=this.value.length+' / 5000';});}
+  // Detectar desktop vs móvil y página de origen para el tracking
+  var tipoPagina = document.getElementById('mTipoPagina');
+  if (tipoPagina && window.innerWidth >= 768) tipoPagina.value = 'desktop';
+
+  var origenEl = document.getElementById('mPaginaOrigen');
+  if (origenEl && !origenEl.value) origenEl.value = document.referrer || window.location.href;
+
+  var f = document.getElementById('mContactForm');
+  if(!f) return;
+  var msg = document.getElementById('mMsg');
+  var cnt = document.getElementById('mMsgCount');
+  if(msg&&cnt){ msg.addEventListener('input',function(){ cnt.textContent=this.value.length+' / 5000'; }); }
+
   f.addEventListener('submit',function(e){
-    var ok=true;
-    ['mNombre','mEmail','mTel','mMsg'].forEach(function(id){
-      var el=document.getElementById(id);
-      if(!el.value.trim()||!el.checkValidity()){el.style.borderColor='#c00';ok=false;}
-      else{el.style.borderColor='#6B8F71';}
+    var ok = true;
+    ['mNombre','mEmail','mTel','mEmpresa','mMsg'].forEach(function(id){
+      var el = document.getElementById(id);
+      if(!el) return;
+      if(!el.value.trim()||!el.checkValidity()){ el.style.borderColor='#c00'; ok=false; }
+      else{ el.style.borderColor='#6B8F71'; }
     });
-    var sel=document.getElementById('mFuente');
-    if(!sel.value){sel.style.borderColor='#c00';ok=false;}
-    else{sel.style.borderColor='#6B8F71';}
-    if(!ok){e.preventDefault();return;}
-    var btn=document.getElementById('mBtnSend');
-    btn.disabled=true;btn.textContent='Enviando...';
+    var sel = document.getElementById('mFuente');
+    if(!sel.value){ sel.style.borderColor='#c00'; ok=false; } else{ sel.style.borderColor='#6B8F71'; }
+    var rgpd = document.getElementById('mRgpd');
+    if(!rgpd.checked){
+      rgpd.closest('.form-field-check').style.outline='2px solid #c00';
+      rgpd.closest('.form-field-check').style.borderRadius='4px';
+      ok=false;
+    }
+    if(!ok){ e.preventDefault(); return; }
+    var btn = document.getElementById('mBtnSend');
+    btn.disabled=true; btn.textContent='Enviando...';
   });
 })();
 </script>
