@@ -27,8 +27,8 @@ Options +FollowSymLinks
 RewriteEngine On
 
 # === URLs amigables paginas estaticas ===
-RewriteRule ^formacion-inteligencia-artificial-empresas/?$ /mod/page/view.php?id=5 [L,QSA]
-RewriteRule ^quienes-somos/?$ /mod/page/view.php?id=1 [L,QSA]
+RewriteRule ^formacion-inteligencia-artificial-empresas\/?$ /mod/page/view.php?id=5 [L,QSA]
+RewriteRule ^quienes-somos\/?$ /mod/page/view.php?id=1 [L,QSA]
 
 # ============================================================
 # SECCION 3B CATEGORIAS: URL tecnica -> URL amigable [301]
@@ -690,7 +690,7 @@ RewriteRule ^course\/view\.php$ /curso_redirect.php?id=%1 [R=302,L]
 
 RewriteCond %{REQUEST_URI} !^\/m\/
 RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
-RewriteCond %{REQUEST_URI} ^/?$
+RewriteCond %{REQUEST_URI} ^\/?$
 RewriteRule ^ /m/ [L,QSA]
 
 # ============================================================
@@ -1247,7 +1247,7 @@ RewriteRule ^cursos-online-de-impresion-3d\/?$ /m/categoria.php?id=106 [L,QSA]
 
 RewriteCond %{REQUEST_URI} !^\/m\/
 RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
-RewriteRule ^cursos-bonificados-de-inteligencia-artificial/?$ /m/categoria.php?id=107 [R=301,L]
+RewriteRule ^cursos-bonificados-de-inteligencia-artificial\/?$ /m/categoria.php?id=107 [R=301,L]
 
 RewriteCond %{REQUEST_URI} !^\/m\/
 RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
@@ -1454,7 +1454,7 @@ RewriteRule ^cursos-online-bonificados-de-robotica\/?$ course/index.php?category
 RewriteRule ^cursos-online-para-autonomos\/?$ course/index.php?categoryid=104 [L,QSA]
 RewriteRule ^cursos-online-bonificados-de-finanzas\/?$ course/index.php?categoryid=105 [L,QSA]
 RewriteRule ^cursos-online-de-impresion-3d\/?$ course/index.php?categoryid=106 [L,QSA]
-RewriteRule ^cursos-bonificados-de-inteligencia-artificial/?$ /course/index.php?categoryid=107 [R=301,L]
+RewriteRule ^cursos-bonificados-de-inteligencia-artificial\/?$ /course/index.php?categoryid=107 [R=301,L]
 RewriteRule ^cursos-online-bonificados-de-inteligencia-artificial\/?$ course/index.php?categoryid=107 [L,QSA]
 RewriteRule ^cursos-online-de-wordpress\/?$ course/index.php?categoryid=108 [L,QSA]
 RewriteRule ^cursos-online-de-euskera\/?$ course/index.php?categoryid=109 [L,QSA]
@@ -1481,6 +1481,12 @@ RewriteRule ^cursos-online-bonificados\/?$ mod/page/view.php?id=2732 [L,QSA]
 # quienes-somos (page cmid=1) — ex nuestros-clientes
 RewriteRule ^nuestros-clientes\/?$ /quienes-somos [R=301,L]
 RewriteRule ^quienes-somos\/?$ mod/page/view.php?id=1 [L,QSA]
+# formacion-bonificada (page cmid=2)
+RewriteRule ^formacion-bonificada\/?$ mod/page/view.php?id=2 [L,QSA]
+# claves-estudiar-online (page cmid=3)
+RewriteRule ^claves-estudiar-online\/?$ mod/page/view.php?id=3 [L,QSA]
+# credito-fundae-2026 (page cmid=4)
+RewriteRule ^credito-fundae-2026\/?$ mod/page/view.php?id=4 [L,QSA]
 RewriteRule ^la-formacion-corporativa-en-la-crisis-del-covid-19\/?$ mod/page/view.php?id=2742 [L,QSA]
 
 # ============================================================
