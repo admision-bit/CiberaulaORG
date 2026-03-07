@@ -1247,8 +1247,10 @@ RewriteRule ^cursos-online-de-impresion-3d\/?$ /m/categoria.php?id=106 [L,QSA]
 
 RewriteCond %{REQUEST_URI} !^\/m\/
 RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
-# Redirect URL corta → URL canónica IA (301)
-RewriteRule ^cursos-bonificados-de-inteligencia-artificial/?$ /cursos-online-bonificados-de-inteligencia-artificial [R=301,L]
+RewriteRule ^cursos-bonificados-de-inteligencia-artificial/?$ /m/categoria.php?id=107 [R=301,L]
+
+RewriteCond %{REQUEST_URI} !^\/m\/
+RewriteCond %{HTTP_USER_AGENT} "Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS" [NC]
 RewriteRule ^cursos-online-bonificados-de-inteligencia-artificial\/?$ /m/categoria.php?id=107 [L,QSA]
 
 RewriteCond %{REQUEST_URI} !^\/m\/
@@ -1452,7 +1454,6 @@ RewriteRule ^cursos-online-bonificados-de-robotica\/?$ course/index.php?category
 RewriteRule ^cursos-online-para-autonomos\/?$ course/index.php?categoryid=104 [L,QSA]
 RewriteRule ^cursos-online-bonificados-de-finanzas\/?$ course/index.php?categoryid=105 [L,QSA]
 RewriteRule ^cursos-online-de-impresion-3d\/?$ course/index.php?categoryid=106 [L,QSA]
-# Redirect URL corta → Moodle cat 107 (desktop, 301)
 RewriteRule ^cursos-bonificados-de-inteligencia-artificial/?$ /course/index.php?categoryid=107 [R=301,L]
 RewriteRule ^cursos-online-bonificados-de-inteligencia-artificial\/?$ course/index.php?categoryid=107 [L,QSA]
 RewriteRule ^cursos-online-de-wordpress\/?$ course/index.php?categoryid=108 [L,QSA]
