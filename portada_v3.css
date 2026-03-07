@@ -181,3 +181,17 @@
 #inst14, #inst13, #inst1, #inst15, #inst16 {
   display: none !important;
 }
+
+/* ============================================================
+   HERO "QUIÉNES SOMOS" — h1 blanco sobre imagen
+   Override necesario: theme/styles.php carga antes que este CSS
+   pero este archivo se carga después y con !important gana.
+   ============================================================ */
+body#page-mod-page-view .qs-hero h1 {
+  color: #ffffff !important;
+  text-shadow: 0 2px 16px rgba(0,0,0,0.65), 0 1px 4px rgba(0,0,0,0.4) !important;
+}
+body#page-mod-page-view .qs-hero h1 em {
+  color: #E07A5F !important;
+  font-style: normal !important;
+}
