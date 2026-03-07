@@ -1468,7 +1468,9 @@ RewriteRule ^cursos-bonificados-de-internet-y-redes-locales\/?$ /cursos-bonifica
 
 RewriteRule ^metodologia-de-formacion\/?$ mod/page/view.php?id=2738 [L,QSA]
 RewriteRule ^cursos-online-bonificados\/?$ mod/page/view.php?id=2732 [L,QSA]
-RewriteRule ^nuestros-clientes\/?$ mod/page/view.php?id=3911 [L,QSA]
+# quienes-somos (page cmid=1) — ex nuestros-clientes
+RewriteRule ^nuestros-clientes\/?$ /quienes-somos [R=301,L]
+RewriteRule ^quienes-somos\/?$ mod/page/view.php?id=1 [L,QSA]
 RewriteRule ^la-formacion-corporativa-en-la-crisis-del-covid-19\/?$ mod/page/view.php?id=2742 [L,QSA]
 
 # ============================================================
